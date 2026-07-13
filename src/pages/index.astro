@@ -35,6 +35,11 @@ const posts = (await getCollection('blog'))
         </div>
       </section>
 
+      <script is:inline>
+        document.getElementById('hero-title').style.opacity = '0'
+        document.getElementById('hero-subtitle').style.opacity = '0'
+      </script>
+
       <section id="board-heading" class="flex flex-col items-center py-20 px-8">
         <span class="board-animate text-2xl font-medium text-gray-950">RECENT ARTICLES</span>
         <h2 class="board-animate text-5xl font-medium text-gray-950 mt-4 mb-8">| 近期文章</h2>
@@ -65,16 +70,18 @@ const posts = (await getCollection('blog'))
 <script>
   import { animate, stagger } from 'motion'
 
-  animate(
-    '#hero-title',
-    { opacity: [0, 1], y: [40, 0] },
-    { duration: 0.4, easing: [0.25, 0.46, 0.45, 0.94] }
-  )
-  animate(
-    '#hero-subtitle',
-    { opacity: [0, 1], y: [24, 0] },
-    { duration: 0.4, delay: 0.15, easing: [0.25, 0.46, 0.45, 0.94] }
-  )
+  requestAnimationFrame(() => {
+    animate(
+      '#hero-title',
+      { opacity: [0, 1], y: [40, 0] },
+      { duration: 0.4, easing: [0.25, 0.46, 0.45, 0.94] }
+    )
+    animate(
+      '#hero-subtitle',
+      { opacity: [0, 1], y: [24, 0] },
+      { duration: 0.4, delay: 0.15, easing: [0.25, 0.46, 0.45, 0.94] }
+    )
+  })
 
   const boardEl = document.getElementById('board-heading')
   const cardGrid = document.getElementById('card-grid')

@@ -20,7 +20,7 @@ const dateStr = pubDate.toLocaleDateString('zh-CN', {
 })
 ---
 
-<a href={`/blog/${slug}`} class="block border border-gray-300 rounded-lg overflow-hidden hover:border-gray-400 transition-colors no-underline">
+<a href={`/blog/${slug}`} class:list={['block border border-gray-300 rounded-lg overflow-hidden hover:border-gray-400 transition-colors no-underline opacity-0 translate-y-6']} data-animate>
   <article class="flex">
     {
       heroImage && (

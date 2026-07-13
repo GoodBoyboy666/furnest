@@ -33,6 +33,12 @@ const nextUrl = page.url.next
         <h1 id="blog-title" class="text-5xl font-medium text-gray-950 mt-4 mb-8">| 博客文章</h1>
         <hr id="blog-line" class="border-gray-300 border-t-2 w-full max-w-5xl mb-12 origin-left" />
 
+        <script is:inline>
+          document.getElementById('blog-label').style.opacity = '0'
+          document.getElementById('blog-title').style.opacity = '0'
+          document.getElementById('blog-line').style.opacity = '0'
+        </script>
+
         <div id="blog-list" class="flex flex-col gap-8 max-w-5xl w-full">
           {
             page.data.map((post: any) => (
@@ -57,38 +63,37 @@ const nextUrl = page.url.next
 <script>
   import { animate, stagger } from 'motion'
 
-  animate(
-    '#blog-label',
-    { opacity: [0, 1], y: [20, 0] },
-    { duration: 0.4, easing: 'ease-out' }
-  )
-  animate(
-    '#blog-title',
-    { opacity: [0, 1], y: [20, 0] },
-    { duration: 0.4, delay: 0.1, easing: 'ease-out' }
-  )
-  animate(
-    '#blog-line',
-    { scaleX: [0, 1], opacity: [0, 1] },
-    { duration: 0.6, delay: 0.2, easing: 'ease-out' }
-  )
+  requestAnimationFrame(() => {
+    animate(
+      '#blog-label',
+      { opacity: [0, 1], y: [20, 0] },
+      { duration: 0.4, easing: 'ease-out' }
+    )
+    animate(
+      '#blog-title',
+      { opacity: [0, 1], y: [20, 0] },
+      { duration: 0.4, delay: 0.1, easing: 'ease-out' }
+    )
+    animate(
+      '#blog-line',
+      { scaleX: [0, 1], opacity: [0, 1] },
+      { duration: 0.6, delay: 0.2, easing: 'ease-out' }
+    )
+  })
 
   const blogList = document.getElementById('blog-list')
-  if (blogList) {
-    Array.from(blogList.children).forEach(c => {
-      c.style.opacity = '0'
-      c.style.transform = 'translateY(24px)'
-    })
-  }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting && entry.target.children.length > 0) {
-        animate(
-          Array.from(entry.target.children),
-          { opacity: [0, 1], y: [24, 0] },
-          { duration: 0.5, delay: stagger(0.1), easing: 'ease-out' }
-        )
+      if (entry.isIntersecting) {
+        const cards = entry.target.querySelectorAll('[data-animate]')
+        if (cards.length > 0) {
+          animate(
+            Array.from(cards),
+            { opacity: [0, 1], y: [24, 0] },
+            { duration: 0.5, delay: stagger(0.1), easing: 'ease-out' }
+          )
+        }
         observer.unobserve(entry.target)
       }
     })
