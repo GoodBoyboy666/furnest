@@ -22,12 +22,14 @@ const posts = (await getCollection('blog'))
     <Header client:load isHome={true} pathname={Astro.url.pathname} />
     <main class="flex-1">
       <section class="relative h-screen flex items-center justify-center overflow-hidden">
-        <Image
-          src={heroImage}
-          alt=""
-          class="absolute inset-0 w-full h-full object-cover"
-          inferSize
-        />
+        <div id="hero-bg" class="absolute inset-0 opacity-0">
+          <Image
+            src={heroImage}
+            alt=""
+            class="w-full h-full object-cover"
+            inferSize
+          />
+        </div>
         <div class="absolute inset-0 bg-gray-900/50 z-0"></div>
         <div class="relative z-10 flex flex-col items-center gap-6 px-8">
           <h1 id="hero-title" class="text-5xl font-semibold text-white drop-shadow-lg opacity-0 translate-y-10">Furnest | 绒毛小窝</h1>

@@ -32,11 +32,14 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
     <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1 py-20 px-8">
       <div class="max-w-5xl mx-auto">
-        <h1 id="page-title" class="text-5xl font-medium text-gray-950 mb-12 opacity-0 translate-y-5">| 分类</h1>
+        <div id="page-title" class="mb-6">
+          <span class="page-animate block text-2xl font-medium text-gray-950 opacity-0">CATEGORIES</span>
+          <h1 class="page-animate text-5xl font-medium text-gray-950 mt-3 opacity-0">| 分类</h1>
+        </div>
         <div id="page-list" class="flex flex-col gap-12">
           {
             sortedGroups.map(([category, posts]) => (
-              <section>
+              <section class="opacity-0">
                 <h2 class="text-2xl font-bold text-gray-950 mb-4">
                   {category}
                   <span class="text-lg font-light text-gray-500 ml-2">({posts.length}篇)</span>
@@ -50,7 +53,7 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
                       day: 'numeric',
                     })
                     return (
-                      <a href={`/blog/${post.id}`} class="flex items-baseline gap-4 text-gray-950 no-underline hover:text-gray-600 transition-colors">
+                      <a href={`/blog/${post.id}`} class="flex items-baseline gap-4 px-3 py-2 -mx-3 rounded-lg text-gray-950 no-underline hover:bg-gray-100 transition-colors">
                         <time class="text-sm font-light text-gray-400 shrink-0">{dateStr}</time>
                         <span class="text-base font-medium truncate">{post.data.title}</span>
                       </a>

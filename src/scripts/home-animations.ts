@@ -3,6 +3,11 @@ import { animate, stagger } from 'motion'
 export function initHomeAnimations() {
   requestAnimationFrame(() => {
     animate(
+      '#hero-bg',
+      { opacity: [0, 1] },
+      { duration: 0.6, easing: 'ease-out' }
+    )
+    animate(
       '#hero-title',
       { opacity: [0, 1], y: [40, 0] },
       { duration: 0.4, easing: [0.25, 0.46, 0.45, 0.94] }
