@@ -67,5 +67,5 @@ for (const post of posts) {
 
 <script>
   import { initListPageAnimations } from '../scripts/list-page-animations'
-  initListPageAnimations('page-title', 'page-list')
+  document.addEventListener('astro:page-load', () => initListPageAnimations('page-title', 'page-list'))
 </script>

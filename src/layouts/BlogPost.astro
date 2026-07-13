@@ -60,12 +60,17 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
 </html>
 
 <script>
+  import { animate, stagger } from 'motion'
+
+  function init() {
   const articleBody = document.getElementById('article-body')
   const tocList = document.getElementById('toc-list')
   if (!articleBody || !tocList) {
     const tocEl = document.getElementById('toc')
     if (tocEl) tocEl.style.display = 'none'
   } else {
+      document.getElementById('toc')!.style.display = ''
+      tocList.innerHTML = ''
       const headings = articleBody.querySelectorAll('h2, h3, h4')
     if (headings.length === 0) {
       document.getElementById('toc')!.style.display = 'none'
@@ -115,8 +120,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
     }
   }
 
-  import { animate, stagger } from 'motion'
-
   const heroEl = document.getElementById('post-hero')
   if (heroEl) {
     requestAnimationFrame(() => {
@@ -160,4 +163,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
     }, { threshold: 0.05 })
     bodyObserver.observe(bodyEl)
   }
+  }
+
+  document.addEventListener('astro:page-load', init)
 </script>

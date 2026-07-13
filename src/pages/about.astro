@@ -42,29 +42,33 @@ import { SITE_TITLE } from '../consts'
 <script>
   import { animate, stagger } from 'motion'
 
-  requestAnimationFrame(() => {
-    const items = document.querySelectorAll('#page-title .page-animate')
-    animate(
-      Array.from(items),
-      { opacity: [0, 1], y: [20, 0] },
-      { duration: 0.4, delay: stagger(0.1), easing: 'ease-out' }
-    )
-  })
+  function init() {
+    requestAnimationFrame(() => {
+      const items = document.querySelectorAll('#page-title .page-animate')
+      animate(
+        Array.from(items),
+        { opacity: [0, 1], y: [20, 0] },
+        { duration: 0.4, delay: stagger(0.1), easing: 'ease-out' }
+      )
+    })
 
-  const listEl = document.getElementById('page-list')
-  if (listEl) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animate(
-            entry.target,
-            { opacity: [0, 1], y: [20, 0] },
-            { duration: 0.5, easing: 'ease-out' }
-          )
-          observer.unobserve(entry.target)
-        }
-      })
-    }, { threshold: 0.05 })
-    observer.observe(listEl)
+    const listEl = document.getElementById('page-list')
+    if (listEl) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animate(
+              entry.target,
+              { opacity: [0, 1], y: [20, 0] },
+              { duration: 0.5, easing: 'ease-out' }
+            )
+            observer.unobserve(entry.target)
+          }
+        })
+      }, { threshold: 0.05 })
+      observer.observe(listEl)
+    }
   }
+
+  document.addEventListener('astro:page-load', init)
 </script>

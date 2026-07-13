@@ -66,5 +66,5 @@ const posts = (await getCollection('blog'))
 
 <script>
   import { initHomeAnimations } from '../scripts/home-animations'
-  initHomeAnimations()
+  document.addEventListener('astro:page-load', initHomeAnimations)
 </script>

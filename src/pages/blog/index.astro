@@ -51,5 +51,5 @@ const nextUrl = allPosts.length > pageSize ? '/blog/page/2' : undefined
 
 <script>
   import { initBlogListAnimations } from '../../scripts/blog-list-animations'
-  initBlogListAnimations()
+  document.addEventListener('astro:page-load', initBlogListAnimations)
 </script>
