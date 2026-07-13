@@ -1,86 +1,110 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header';
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import BaseHead from '../components/BaseHead.astro'
+import Footer from '../components/Footer.astro'
+import FormattedDate from '../components/FormattedDate.astro'
+import Header from '../components/Header'
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data']
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <Header client:load pathname={Astro.url.pathname} />
+    <main class="flex-1 pt-8 pb-20 px-8">
+      <article class="mx-auto max-w-6xl">
+        {
+          heroImage && (
+            <div class="mb-8">
+              <Image src={heroImage} alt="" class="block mx-auto rounded-xl shadow-lg w-full max-w-4xl" width={1020} height={510} />
+            </div>
+          )
+        }
+        <div class="text-center mb-12">
+          <div class="text-sm text-gray-500 mb-2">
+            <FormattedDate date={pubDate} />
+            {updatedDate && (
+              <span class="text-sm text-gray-400 italic">
+                &nbsp;&middot; Last updated on <FormattedDate date={updatedDate} />
+              </span>
+            )}
+          </div>
+          <h1 class="text-4xl font-bold text-gray-950">{title}</h1>
+          <hr class="mt-6 border-gray-200" />
+        </div>
 
-	<body>
-		<Header client:load pathname={Astro.url.pathname} />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_minmax(0,48rem)_1fr] gap-12">
+          <div class="hidden xl:block"></div>
+          <div id="article-body" class="prose prose-lg prose-gray max-w-none">
+            <slot />
+          </div>
+
+          <aside id="toc" class="hidden xl:block">
+            <nav class="sticky top-24 w-56">
+              <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">目录</h3>
+              <ul id="toc-list" class="text-sm space-y-0.5 border-l border-gray-200 pl-4"></ul>
+            </nav>
+          </aside>
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
 </html>
+
+<script>
+  const articleBody = document.getElementById('article-body')
+  const tocList = document.getElementById('toc-list')
+  if (!articleBody || !tocList) {
+    document.getElementById('toc')?.classList.add('hidden')
+  } else {
+    const headings = articleBody.querySelectorAll('h2, h3, h4')
+    if (headings.length === 0) {
+      document.getElementById('toc')?.classList.add('hidden')
+    } else {
+      const items: { id: string; text: string; level: number; el: HTMLElement }[] = []
+
+      headings.forEach((heading) => {
+        const el = heading as HTMLElement
+        const level = parseInt(el.tagName.charAt(1))
+        if (!el.id) {
+          el.id = el.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '') || ''
+        }
+        el.style.scrollMarginTop = '5rem'
+        items.push({ id: el.id, text: el.textContent || '', level, el })
+      })
+
+      items.forEach((item) => {
+        const li = document.createElement('li')
+        const a = document.createElement('a')
+        a.href = `#${item.id}`
+        a.textContent = item.text
+        const indent = item.level === 2 ? '' : item.level === 3 ? 'ml-3 text-xs' : 'ml-6 text-xs'
+        a.className = `block no-underline text-gray-500 hover:text-gray-950 transition-colors rounded-lg px-3 py-1 -ml-3 toc-link ${indent}`
+        li.appendChild(a)
+        tocList.appendChild(li)
+      })
+
+      const links = tocList.querySelectorAll('.toc-link')
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              links.forEach((l) => l.classList.remove('bg-gray-100', 'text-gray-950', 'font-medium'))
+              const active = tocList.querySelector(`[href="#${entry.target.id}"]`)
+              if (active) active.classList.add('bg-gray-100', 'text-gray-950', 'font-medium')
+            }
+          })
+        },
+        { rootMargin: '-80px 0px -80% 0px', threshold: 0 }
+      )
+      headings.forEach((h) => observer.observe(h))
+    }
+  }
+</script>
