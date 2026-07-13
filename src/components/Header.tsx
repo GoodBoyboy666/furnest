@@ -1,5 +1,5 @@
-import { Menu, Search, SquareArrowOutUpRight, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Menu, Moon, Search, SquareArrowOutUpRight, Sun, X } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 
 const NAV_LINKS = [
   { href: '/', label: '首页' },
@@ -19,6 +19,7 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [activePath, setActivePath] = useState(initialPathname)
+  const [dark, setDark] = useState(() => typeof document !== 'undefined' && document.documentElement.classList.contains('dark'))
 
   useEffect(() => {
     setActivePath(window.location.pathname)
@@ -35,9 +36,21 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
     return href === pathname || href === '/' + (subpath?.[0] || '')
   }
 
-  const linkColor = isHome && !scrolled ? 'text-white hover:text-gray-300' : 'text-gray-950 hover:text-gray-600'
-  const bgColor = isHome && !scrolled ? 'bg-transparent' : 'bg-white'
+  const linkColor = isHome && !scrolled ? 'text-white hover:text-gray-300' : 'text-gray-950 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400'
+  const bgColor = isHome && !scrolled ? 'bg-transparent' : 'bg-white dark:bg-gray-900'
   const position = isHome ? 'fixed' : 'sticky'
+
+  const toggleDark = useCallback(() => {
+    const next = !dark
+    setDark(next)
+    if (next) {
+      document.documentElement.classList.add('dark')
+      localStorage.theme = 'dark'
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.theme = 'light'
+    }
+  }, [dark])
 
   return (
     <header className={`${position} top-0 left-0 w-full z-50 rounded-b-lg transition-all duration-300 ${bgColor}`}>
@@ -66,6 +79,13 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
             <SquareArrowOutUpRight size={24} />
           </a>
           <button
+            onClick={toggleDark}
+            className={`transition-colors duration-300 ${linkColor}`}
+            aria-label="切换暗黑模式"
+          >
+            {dark ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+          <button
             onClick={() => setMenuOpen(!menuOpen)}
             className={`md:hidden transition-colors duration-300 ${linkColor}`}
             aria-label="菜单"
@@ -75,14 +95,14 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
         </div>
       </nav>
 
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-gray-100 shadow-lg ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shadow-lg ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="flex flex-col py-2">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className={`block px-6 py-3 text-base font-light text-gray-950 no-underline hover:bg-gray-50 ${isActive(link.href) ? 'font-bold underline underline-offset-4' : ''}`}
+              className={`block px-6 py-3 text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:bg-gray-50 dark:hover:bg-gray-800 ${isActive(link.href) ? 'font-bold underline underline-offset-4' : ''}`}
             >
               {link.label}
             </a>

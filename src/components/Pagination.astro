@@ -11,12 +11,12 @@ const { prevUrl, nextUrl } = Astro.props
   (prevUrl || nextUrl) && (
     <nav class="flex justify-center gap-8 mt-12">
       {prevUrl && (
-        <a href={prevUrl} class="px-6 py-2 border border-gray-300 rounded-lg text-base font-light text-gray-950 no-underline hover:bg-gray-50 transition-colors">
+        <a href={prevUrl} class="px-6 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
           &larr; 上一页
         </a>
       )}
       {nextUrl && (
-        <a href={nextUrl} class="px-6 py-2 border border-gray-300 rounded-lg text-base font-light text-gray-950 no-underline hover:bg-gray-50 transition-colors">
+        <a href={nextUrl} class="px-6 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
           下一页 &rarr;
         </a>
       )}

@@ -24,9 +24,9 @@ const nextUrl = allPosts.length > pageSize ? '/blog/page/2' : undefined
     <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1">
       <section class="flex flex-col items-center py-20 px-8">
-        <span id="blog-label" class="text-2xl font-medium text-gray-950 opacity-0 translate-y-5">BLOG ARTICLES</span>
-        <h1 id="blog-title" class="text-5xl font-medium text-gray-950 mt-4 mb-8 opacity-0 translate-y-5">| 博客文章</h1>
-        <hr id="blog-line" class="border-gray-300 border-t-2 w-full max-w-5xl mb-12 origin-left opacity-0" />
+        <span id="blog-label" class="text-2xl font-medium text-gray-950 dark:text-gray-100 opacity-0 translate-y-5">BLOG ARTICLES</span>
+        <h1 id="blog-title" class="text-5xl font-medium text-gray-950 dark:text-gray-100 mt-4 mb-8 opacity-0 translate-y-5">| 博客文章</h1>
+        <hr id="blog-line" class="border-gray-300 dark:border-gray-700 border-t-2 w-full max-w-5xl mb-12 origin-left opacity-0" />
 
         <div id="blog-list" class="flex flex-col gap-8 max-w-5xl w-full">
           {

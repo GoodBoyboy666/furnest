@@ -1,6 +1,8 @@
 @import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
 
 body {
   font-family: var(--font-atkinson);
+  @apply bg-white dark:bg-gray-900;
 }

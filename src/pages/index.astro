@@ -38,9 +38,9 @@ const posts = (await getCollection('blog'))
       </section>
 
       <section id="board-heading" class="flex flex-col items-center py-20 px-8">
-        <span class="board-animate text-2xl font-medium text-gray-950">RECENT ARTICLES</span>
-        <h2 class="board-animate text-5xl font-medium text-gray-950 mt-4 mb-8">| 近期文章</h2>
-        <hr class="board-line border-gray-300 w-full max-w-[1380px] mb-12 origin-left" />
+        <span class="board-animate text-2xl font-medium text-gray-950 dark:text-gray-100">RECENT ARTICLES</span>
+        <h2 class="board-animate text-5xl font-medium text-gray-950 dark:text-gray-100 mt-4 mb-8">| 近期文章</h2>
+        <hr class="board-line border-gray-300 dark:border-gray-700 w-full max-w-[1380px] mb-12 origin-left" />
 
         {
           posts.length > 0 ? (
@@ -55,7 +55,7 @@ const posts = (await getCollection('blog'))
               ))}
             </div>
           ) : (
-            <p class="text-gray-500 text-lg">暂无文章</p>
+            <p class="text-gray-500 dark:text-gray-400 text-lg">暂无文章</p>
           )
         }
       </section>

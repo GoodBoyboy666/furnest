@@ -15,10 +15,10 @@ import { SITE_TITLE } from '../consts'
     <main class="flex-1 py-20 px-8">
       <div class="max-w-3xl mx-auto">
         <div id="page-title" class="mb-6">
-          <span class="page-animate block text-2xl font-medium text-gray-950 opacity-0">ABOUT</span>
-          <h1 class="page-animate text-5xl font-medium text-gray-950 mt-3 opacity-0">| 关于</h1>
+          <span class="page-animate block text-2xl font-medium text-gray-950 dark:text-gray-100 opacity-0">ABOUT</span>
+          <h1 class="page-animate text-5xl font-medium text-gray-950 dark:text-gray-100 mt-3 opacity-0">| 关于</h1>
         </div>
-        <div id="page-list" class="prose prose-lg prose-gray max-w-none opacity-0">
+        <div id="page-list" class="prose prose-lg prose-gray dark:prose-invert max-w-none opacity-0">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
             labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
@@ -42,15 +42,13 @@ import { SITE_TITLE } from '../consts'
 <script>
   import { animate, stagger } from 'motion'
 
-  function init() {
-    requestAnimationFrame(() => {
-      const items = document.querySelectorAll('#page-title .page-animate')
-      animate(
-        Array.from(items),
-        { opacity: [0, 1], y: [20, 0] },
-        { duration: 0.4, delay: stagger(0.1), easing: 'ease-out' }
-      )
-    })
+  document.addEventListener('astro:page-load', () => {
+    const items = document.querySelectorAll('#page-title .page-animate')
+    animate(
+      Array.from(items),
+      { opacity: [0, 1], y: [20, 0] },
+      { duration: 0.4, delay: stagger(0.1), easing: 'ease-out' }
+    )
 
     const listEl = document.getElementById('page-list')
     if (listEl) {
@@ -68,7 +66,5 @@ import { SITE_TITLE } from '../consts'
       }, { threshold: 0.05 })
       observer.observe(listEl)
     }
-  }
-
-  document.addEventListener('astro:page-load', init)
+  })
 </script>

@@ -20,7 +20,7 @@ const dateStr = pubDate.toLocaleDateString('zh-CN', {
 })
 ---
 
-<a href={`/blog/${slug}`} class:list={['block border border-gray-300 rounded-lg overflow-hidden hover:border-gray-400 transition-colors no-underline opacity-0 translate-y-6']} data-animate>
+<a href={`/blog/${slug}`} class:list={['block border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden hover:border-gray-400 dark:hover:border-gray-500 transition-colors no-underline opacity-0 translate-y-6']} data-animate>
   <article class="flex">
     {
       heroImage && (
@@ -30,16 +30,16 @@ const dateStr = pubDate.toLocaleDateString('zh-CN', {
       )
     }
     <div class="flex flex-col gap-3 p-8 flex-1 min-w-0">
-      <h2 class="text-2xl font-bold text-gray-950">{title}</h2>
+      <h2 class="text-2xl font-bold text-gray-950 dark:text-gray-100">{title}</h2>
       <div class="flex items-center gap-3">
-        <time class="text-sm font-light text-gray-500" datetime={pubDate.toISOString()}>
+        <time class="text-sm font-light text-gray-500 dark:text-gray-400" datetime={pubDate.toISOString()}>
           {dateStr}
         </time>
         {category && (
-          <span class="text-sm font-light text-gray-500">&middot; {category}</span>
+          <span class="text-sm font-light text-gray-500 dark:text-gray-400">&middot; {category}</span>
         )}
       </div>
-      <p class="text-base font-medium text-gray-600 line-clamp-2">{description}</p>
+      <p class="text-base font-medium text-gray-600 dark:text-gray-400 line-clamp-2">{description}</p>
     </div>
   </article>
 </a>
