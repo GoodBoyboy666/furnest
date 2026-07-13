@@ -1,12 +1,24 @@
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import { fileURLToPath } from 'node:url';
+import type { AstroIntegration } from 'astro';
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import sirv from 'sirv';
+
+const pagefindDevAssets: AstroIntegration = {
+  name: 'pagefind-dev-assets',
+  hooks: {
+    'astro:server:setup': ({ server }) => {
+      server.middlewares.use('/pagefind', sirv(fileURLToPath(new URL('./dist/pagefind', import.meta.url)), { dev: true }));
+    },
+  },
+};
 
 export default defineConfig({
   site: 'https://example.com',
-  integrations: [mdx(), sitemap(), react()],
+  integrations: [mdx(), sitemap(), react(), pagefindDevAssets],
   vite: { plugins: [tailwindcss()] },
   fonts: [
     {
