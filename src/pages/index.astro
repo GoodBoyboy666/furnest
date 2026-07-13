@@ -5,7 +5,7 @@ import heroImage from '../assets/hero.webp'
 import ArticleCard from '../components/ArticleCard.astro'
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
-import Header from '../components/Header.astro'
+import Header from '../components/Header'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
 
 const posts = (await getCollection('blog'))
@@ -19,7 +19,7 @@ const posts = (await getCollection('blog'))
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body class="flex flex-col min-h-screen">
-    <Header />
+    <Header client:load isHome={true} pathname={Astro.url.pathname} />
     <main class="flex-1">
       <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <Image
@@ -30,15 +30,10 @@ const posts = (await getCollection('blog'))
         />
         <div class="absolute inset-0 bg-gray-900/50 z-0"></div>
         <div class="relative z-10 flex flex-col items-center gap-6 px-8">
-          <h1 id="hero-title" class="text-5xl font-semibold text-white drop-shadow-lg">Furnest | 绒毛小窝</h1>
-          <p id="hero-subtitle" class="text-lg italic text-white drop-shadow-lg">&lang;看朝霞万里，石头花开&rang;</p>
+          <h1 id="hero-title" class="text-5xl font-semibold text-white drop-shadow-lg opacity-0 translate-y-10">Furnest | 绒毛小窝</h1>
+          <p id="hero-subtitle" class="text-lg italic text-white drop-shadow-lg opacity-0 translate-y-6">&lang;看朝霞万里，石头花开&rang;</p>
         </div>
       </section>
-
-      <script is:inline>
-        document.getElementById('hero-title').style.opacity = '0'
-        document.getElementById('hero-subtitle').style.opacity = '0'
-      </script>
 
       <section id="board-heading" class="flex flex-col items-center py-20 px-8">
         <span class="board-animate text-2xl font-medium text-gray-950">RECENT ARTICLES</span>
@@ -68,88 +63,6 @@ const posts = (await getCollection('blog'))
 </html>
 
 <script>
-  import { animate, stagger } from 'motion'
-
-  requestAnimationFrame(() => {
-    animate(
-      '#hero-title',
-      { opacity: [0, 1], y: [40, 0] },
-      { duration: 0.4, easing: [0.25, 0.46, 0.45, 0.94] }
-    )
-    animate(
-      '#hero-subtitle',
-      { opacity: [0, 1], y: [24, 0] },
-      { duration: 0.4, delay: 0.15, easing: [0.25, 0.46, 0.45, 0.94] }
-    )
-  })
-
-  const boardEl = document.getElementById('board-heading')
-  const cardGrid = document.getElementById('card-grid')
-  const footerEl = document.querySelector('footer')
-
-  if (boardEl) {
-    boardEl.querySelectorAll('.board-animate').forEach(el => {
-      el.style.opacity = '0'
-      el.style.transform = 'translateY(24px)'
-    })
-    const bl = boardEl.querySelector('.board-line')
-    if (bl) { bl.style.opacity = '0'; bl.style.transform = 'scaleX(0)' }
-  }
-  if (cardGrid) {
-    Array.from(cardGrid.children).forEach(c => {
-      c.style.opacity = '0'
-      c.style.transform = 'translateY(32px)'
-    })
-  }
-  if (footerEl) {
-    Array.from(footerEl.children).forEach(c => {
-      if (!c.classList.contains('footer-line')) {
-        c.style.opacity = '0'
-      }
-    })
-    const fl = footerEl.querySelector('.footer-line')
-    if (fl) { fl.style.opacity = '0'; fl.style.transform = 'scaleX(0)' }
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        if (entry.target === boardEl) {
-          const items = entry.target.querySelectorAll('.board-animate')
-          animate(
-            Array.from(items),
-            { opacity: [0, 1], y: [24, 0] },
-            { duration: 0.6, delay: stagger(0.12), easing: 'ease-out' }
-          )
-          const boardLine = entry.target.querySelector('.board-line')
-          if (boardLine) {
-            animate(boardLine, { scaleX: [0, 1], opacity: [0, 1] }, { duration: 0.7, delay: 0.24, easing: 'ease-out' })
-          }
-        }
-        if (entry.target === cardGrid && cardGrid.children.length > 0) {
-          animate(
-            Array.from(cardGrid.children),
-            { opacity: [0, 1], y: [32, 0] },
-            { duration: 0.6, delay: stagger(0.1), easing: 'ease-out' }
-          )
-        }
-        if (entry.target === footerEl) {
-          const footerLine = footerEl.querySelector('.footer-line')
-          if (footerLine) {
-            animate(footerLine, { scaleX: [0, 1], opacity: [0, 1] }, { duration: 1.2, easing: 'ease-out' })
-          }
-          animate(
-            Array.from(footerEl.children).filter(c => !c.classList.contains('footer-line')),
-            { opacity: [0, 1] },
-            { duration: 1.5, delay: stagger(0.4), easing: 'ease-out' }
-          )
-        }
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.1 })
-
-  if (boardEl) observer.observe(boardEl)
-  if (cardGrid) observer.observe(cardGrid)
-  if (footerEl) observer.observe(footerEl)
+  import { initHomeAnimations } from '../scripts/home-animations'
+  initHomeAnimations()
 </script>

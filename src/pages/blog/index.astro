@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
 import BlogCard from '../../components/BlogCard.astro'
 import Footer from '../../components/Footer.astro'
-import Header from '../../components/Header.astro'
+import Header from '../../components/Header'
 import Pagination from '../../components/Pagination.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts'
 
@@ -21,18 +21,12 @@ const nextUrl = allPosts.length > pageSize ? '/blog/page/2' : undefined
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body class="flex flex-col min-h-screen">
-    <Header />
+    <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1">
       <section class="flex flex-col items-center py-20 px-8">
-        <span id="blog-label" class="text-2xl font-medium text-gray-950">BLOG ARTICLES</span>
-        <h1 id="blog-title" class="text-5xl font-medium text-gray-950 mt-4 mb-8">| 博客文章</h1>
+        <span id="blog-label" class="text-2xl font-medium text-gray-950 opacity-0 translate-y-5">BLOG ARTICLES</span>
+        <h1 id="blog-title" class="text-5xl font-medium text-gray-950 mt-4 mb-8 opacity-0 translate-y-5">| 博客文章</h1>
         <hr id="blog-line" class="border-gray-300 border-t-2 w-full max-w-5xl mb-12 origin-left opacity-0" />
-
-        <script is:inline>
-          document.getElementById('blog-label').style.opacity = '0'
-          document.getElementById('blog-title').style.opacity = '0'
-          document.getElementById('blog-line').style.opacity = '0'
-        </script>
 
         <div id="blog-list" class="flex flex-col gap-8 max-w-5xl w-full">
           {
@@ -43,7 +37,7 @@ const nextUrl = allPosts.length > pageSize ? '/blog/page/2' : undefined
                 pubDate={post.data.pubDate}
                 slug={post.id}
                 heroImage={post.data.heroImage}
-                category={(post.data as any).category}
+                category={post.data.category}
               />
             ))
           }
@@ -56,43 +50,6 @@ const nextUrl = allPosts.length > pageSize ? '/blog/page/2' : undefined
 </html>
 
 <script>
-  import { animate, stagger } from 'motion'
-
-  requestAnimationFrame(() => {
-    animate(
-      '#blog-label',
-      { opacity: [0, 1], y: [20, 0] },
-      { duration: 0.4, easing: 'ease-out' }
-    )
-    animate(
-      '#blog-title',
-      { opacity: [0, 1], y: [20, 0] },
-      { duration: 0.4, delay: 0.1, easing: 'ease-out' }
-    )
-    animate(
-      '#blog-line',
-      { scaleX: [0, 1], opacity: [0, 1] },
-      { duration: 0.6, delay: 0.2, easing: 'ease-out' }
-    )
-  })
-
-  const blogList = document.getElementById('blog-list')
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const cards = entry.target.querySelectorAll('[data-animate]')
-        if (cards.length > 0) {
-          animate(
-            Array.from(cards),
-            { opacity: [0, 1], y: [24, 0] },
-            { duration: 0.5, delay: stagger(0.1), easing: 'ease-out' }
-          )
-        }
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.1 })
-
-  if (blogList) observer.observe(blogList)
+  import { initBlogListAnimations } from '../../scripts/blog-list-animations'
+  initBlogListAnimations()
 </script>

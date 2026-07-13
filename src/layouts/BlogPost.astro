@@ -4,7 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import Header from '../components/Header';
 
 type Props = CollectionEntry<'blog'>['data'];
 
@@ -56,7 +56,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 
 	<body>
-		<Header />
+		<Header client:load pathname={Astro.url.pathname} />
 		<main>
 			<article>
 				<div class="hero-image">
