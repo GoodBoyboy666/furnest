@@ -1,0 +1,20 @@
+---
+import BaseHead from '../components/BaseHead.astro'
+import Footer from '../components/Footer.astro'
+import Header from '../components/Header.astro'
+import { SITE_TITLE } from '../consts'
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`分类 - ${SITE_TITLE}`} description="文章分类" />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <Header />
+    <main class="flex-1 flex items-center justify-center py-20">
+      <h1 class="text-3xl font-bold text-gray-950">分类</h1>
+    </main>
+    <Footer />
+  </body>
+</html>

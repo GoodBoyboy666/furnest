@@ -1,49 +1,63 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { Image } from 'astro:assets'
+import { getCollection } from 'astro:content'
+import heroImage from '../assets/hero.webp'
+import ArticleCard from '../components/ArticleCard.astro'
+import BaseHead from '../components/BaseHead.astro'
+import Footer from '../components/Footer.astro'
+import Header from '../components/Header.astro'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 4)
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <Header />
+    <main class="flex-1">
+      <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <Image
+          src={heroImage}
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover"
+          inferSize
+        />
+        <div class="absolute inset-0 bg-gray-900/50 z-0"></div>
+        <div class="relative z-10 flex flex-col items-center gap-6 px-8">
+          <h1 class="text-5xl font-semibold text-white drop-shadow-lg">Furnest | 绒毛小窝</h1>
+          <p class="text-lg italic text-white drop-shadow-lg">&lang;看朝霞万里，石头花开&rang;</p>
+        </div>
+      </section>
+
+      <section class="flex flex-col items-center py-20 px-8">
+        <span class="text-2xl font-medium text-gray-950">RECENT ARTICLES</span>
+        <h2 class="text-5xl font-medium text-gray-950 mt-4 mb-8">| 近期文章</h2>
+        <hr class="border-gray-300 w-full max-w-[1380px] mb-12" />
+
+        {
+          posts.length > 0 ? (
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1380px] w-full">
+              {posts.map((post) => (
+                <ArticleCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  pubDate={post.data.pubDate}
+                  slug={post.id}
+                />
+              ))}
+            </div>
+          ) : (
+            <p class="text-gray-500 text-lg">暂无文章</p>
+          )
+        }
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>

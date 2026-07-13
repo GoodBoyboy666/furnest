@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string
+  description: string
+  pubDate: Date
+  slug: string
+}
+
+const { title, description, pubDate, slug } = Astro.props
+
+const dateStr = pubDate.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})
+---
+
+<a href={`/blog/${slug}`} class="block h-full bg-gray-50 rounded-lg p-8 hover:bg-gray-100 transition-colors no-underline">
+  <article class="flex flex-col h-full gap-3">
+    <h3 class="text-xl font-bold text-gray-950">{title}</h3>
+    <p class="text-base text-gray-600 line-clamp-3">{description}</p>
+    <div class="flex items-center justify-between mt-auto">
+      <time class="text-sm text-gray-500" datetime={pubDate.toISOString()}>
+        {dateStr}
+      </time>
+      <span class="text-sm text-gray-950">
+        完整文章 &rarr;
+      </span>
+    </div>
+  </article>
+</a>
