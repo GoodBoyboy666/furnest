@@ -1,0 +1,20 @@
+[
+  {
+    "name": "星河笔记",
+    "url": "https://example.com/stellar-notes",
+    "avatar": "https://avatar.furwolf.com/10.x/shapes/svg?seed=StellarNotes",
+    "description": "记录前端开发、开源实践与日常灵感的个人博客。"
+  },
+  {
+    "name": "林间小屋",
+    "url": "https://example.com/forest-cabin",
+    "avatar": "https://avatar.furwolf.com/10.x/shapes/svg?seed=ForestCabin",
+    "description": "分享摄影、旅行和生活片段。"
+  },
+  {
+    "name": "远方的代码与诗",
+    "url": "https://example.com/code-and-poetry",
+    "avatar": "https://avatar.furwolf.com/10.x/shapes/svg?seed=CodeAndPoetry",
+    "description": "一个关注 Web 技术、独立创作与数字生活的长期写作空间，也收藏那些值得反复阅读的故事。"
+  }
+]
