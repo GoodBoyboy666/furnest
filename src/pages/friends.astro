@@ -44,6 +44,8 @@ const friends: Friend[] = friendsData
                     alt={friend.name}
                     class="friend-avatar absolute inset-0 h-full w-full object-cover"
                     loading="lazy"
+                    onload="this.hidden = false"
+                    onerror="this.hidden = true"
                   />
                 </span>
                 <span class="min-w-0 flex-1">
@@ -66,19 +68,7 @@ const friends: Friend[] = friendsData
 <script>
   import { initListPageAnimations } from '../scripts/list-page-animations'
 
-  function initFriendAvatars() {
-    document.querySelectorAll<HTMLImageElement>('.friend-avatar').forEach((avatar) => {
-      if (avatar.dataset.fallbackInitialized === 'true') return
-      avatar.dataset.fallbackInitialized = 'true'
-      avatar.addEventListener('error', () => {
-        avatar.hidden = true
-      }, { once: true })
-      if (avatar.complete && avatar.naturalWidth === 0) avatar.hidden = true
-    })
-  }
-
   document.addEventListener('astro:page-load', () => {
-    initFriendAvatars()
     const friendList = document.getElementById('page-list')
     if (!friendList || friendList.dataset.animationInitialized === 'true') return
     friendList.dataset.animationInitialized = 'true'
