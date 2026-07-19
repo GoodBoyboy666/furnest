@@ -6,6 +6,8 @@ import ArticleCard from '../components/ArticleCard.astro'
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header'
+import FurryMark from '../components/FurryMark.astro'
+import WaveBoundary from '../components/WaveBoundary.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
 
 const posts = (await getCollection('blog'))
@@ -21,26 +23,35 @@ const posts = (await getCollection('blog'))
   <body class="flex flex-col min-h-screen">
     <Header client:load isHome={true} pathname={Astro.url.pathname} />
     <main class="flex-1">
-      <section class="relative h-screen flex items-center justify-center overflow-hidden">
+      <section class="relative h-screen min-h-[620px] flex items-center justify-center overflow-hidden">
         <div id="hero-bg" class="absolute inset-0 opacity-0">
           <Image
             src={heroImage}
             alt=""
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover object-[58%_center] sm:object-center"
             inferSize
           />
         </div>
-        <div class="absolute inset-0 bg-gray-900/50 z-0"></div>
-        <div class="relative z-10 flex flex-col items-center gap-6 px-8">
-          <h1 id="hero-title" class="text-5xl font-semibold text-white drop-shadow-lg opacity-0 translate-y-10">Furnest | 绒毛小窝</h1>
-          <p id="hero-subtitle" class="text-lg italic text-white drop-shadow-lg opacity-0 translate-y-6">&lang;看朝霞万里，石头花开&rang;</p>
+        <div class="absolute inset-0 z-0 bg-[linear-gradient(120deg,rgba(27,21,18,.82),rgba(44,96,125,.38)_55%,rgba(191,91,40,.38)),linear-gradient(to_top,rgba(29,25,23,.7),transparent_55%)]"></div>
+        <FurryMark variant="paw" class="absolute left-[8%] top-[28%] z-[1] h-20 w-20 -rotate-12 text-white/15 sm:h-28 sm:w-28" />
+        <FurryMark variant="paw" class="absolute bottom-[18%] right-[9%] z-[1] h-14 w-14 rotate-12 text-[#ffd7b8]/30 sm:h-20 sm:w-20" />
+        <div class="relative z-10 mx-5 flex max-w-4xl flex-col items-center px-3 text-center sm:px-8">
+          <FurryMark variant="ears" class="mb-4 h-10 w-20 text-[#ffd0aa] drop-shadow-lg" />
+          <div class="flex items-center gap-3 text-[#bfe8ff] sm:gap-4">
+            <span class="h-px w-8 bg-current opacity-70 sm:w-14"></span>
+            <span class="text-xs font-bold tracking-[.26em] drop-shadow-lg">FURWOLF CREATION</span>
+            <span class="h-px w-8 bg-current opacity-70 sm:w-14"></span>
+          </div>
+          <h1 id="hero-title" class="mt-1 text-4xl font-semibold text-white [text-shadow:0_3px_18px_rgba(0,0,0,.75)] opacity-0 translate-y-10 sm:text-6xl">Furnest <span class="text-[#ffd0aa]">|</span> 绒毛小窝</h1>
+          <p id="hero-subtitle" class="mt-5 text-base italic text-white/95 [text-shadow:0_2px_12px_rgba(0,0,0,.85)] opacity-0 translate-y-6 sm:text-lg">&lang;看朝霞万里，石头花开&rang;</p>
         </div>
+        <WaveBoundary variant="hero" class="home-boundary" />
       </section>
 
       <section id="board-heading" class="flex flex-col items-center py-20 px-8">
-        <span class="board-animate text-2xl font-medium text-gray-950 dark:text-gray-100">RECENT ARTICLES</span>
-        <h2 class="board-animate text-5xl font-medium text-gray-950 dark:text-gray-100 mt-4 mb-8">| 近期文章</h2>
-        <hr class="board-line border-gray-300 dark:border-gray-700 w-full max-w-[1380px] mb-12 origin-left" />
+        <span class="board-animate theme-kicker text-xl sm:text-2xl">RECENT ARTICLES</span>
+        <h2 class="board-animate theme-heading mt-4 mb-8 text-4xl font-medium sm:text-5xl"><span class="text-[var(--color-paw)]">|</span> 近期文章</h2>
+        <hr class="board-line theme-rule w-full max-w-[1380px] mb-12 origin-left" />
 
         {
           posts.length > 0 ? (
@@ -55,7 +66,7 @@ const posts = (await getCollection('blog'))
               ))}
             </div>
           ) : (
-            <p class="text-gray-500 dark:text-gray-400 text-lg">暂无文章</p>
+            <p class="theme-muted text-lg">暂无文章</p>
           )
         }
       </section>

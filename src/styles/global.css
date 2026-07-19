@@ -2,7 +2,172 @@
 @variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
 
+:root {
+  --color-canvas: #fffaf0;
+  --color-surface: #fffdf8;
+  --color-surface-soft: #f7ead7;
+  --color-ink: #352820;
+  --color-muted: #79695e;
+  --color-sky: #286f98;
+  --color-paw: #ad4f20;
+  --color-fur: #8a5d42;
+  --color-border: #dcc8ad;
+  --shadow-soft: 0 12px 34px rgb(94 61 38 / 10%);
+  --shadow-hover: 0 18px 42px rgb(94 61 38 / 18%);
+  --radius-card: 1.25rem;
+  --focus-ring: #2074a4;
+}
+
+.dark {
+  --color-canvas: #1d1917;
+  --color-surface: #28221f;
+  --color-surface-soft: #352c27;
+  --color-ink: #fff7e8;
+  --color-muted: #c8b9aa;
+  --color-sky: #71b8df;
+  --color-paw: #ef9a5d;
+  --color-fur: #d1a27f;
+  --color-border: #54453d;
+  --shadow-soft: 0 12px 34px rgb(0 0 0 / 22%);
+  --shadow-hover: 0 18px 42px rgb(0 0 0 / 32%);
+  --focus-ring: #8bd1f2;
+}
+
+html {
+  background: var(--color-canvas);
+}
+
 body {
   font-family: var(--font-atkinson);
-  @apply bg-white dark:bg-gray-900;
+  color: var(--color-ink);
+  background:
+    radial-gradient(circle at 8% 4%, color-mix(in srgb, var(--color-paw) 7%, transparent) 0 9rem, transparent 20rem),
+    var(--color-canvas);
+}
+
+::selection {
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-sky) 30%, transparent);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+
+.theme-surface {
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.theme-card {
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.theme-card:hover {
+  background: color-mix(in srgb, var(--color-surface) 88%, var(--color-sky));
+  border-color: color-mix(in srgb, var(--color-border) 55%, var(--color-sky));
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+.theme-kicker {
+  color: var(--color-sky);
+  font-weight: 700;
+  letter-spacing: .14em;
+}
+
+.theme-heading {
+  color: var(--color-ink);
+}
+
+.theme-muted {
+  color: var(--color-muted);
+}
+
+.theme-rule {
+  border-color: var(--color-border);
+}
+
+.theme-list-link {
+  color: var(--color-ink);
+  border-radius: .85rem;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.theme-list-link:hover {
+  color: var(--color-sky);
+  background: var(--color-surface-soft);
+}
+
+.toc-link {
+  color: var(--color-muted);
+}
+
+.toc-link:hover,
+.toc-link.toc-active {
+  color: var(--color-ink);
+  background: var(--color-surface-soft);
+}
+
+.toc-link.toc-active {
+  font-weight: 600;
+}
+
+.article-prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-lead: var(--color-muted);
+  --tw-prose-links: var(--color-sky);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-counters: var(--color-paw);
+  --tw-prose-bullets: var(--color-paw);
+  --tw-prose-hr: var(--color-border);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-paw);
+  --tw-prose-captions: var(--color-muted);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-pre-bg: var(--color-surface-soft);
+  --tw-prose-th-borders: var(--color-border);
+  --tw-prose-td-borders: var(--color-border);
+}
+
+.article-prose :where(blockquote, pre):not(:where([class~="not-prose"] *)) {
+  border-radius: 1rem;
+  background: var(--color-surface-soft);
+}
+
+.article-prose :where(code):not(:where(pre code, [class~="not-prose"] *)) {
+  border-radius: .35rem;
+  background: var(--color-surface-soft);
+  padding: .12em .35em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .theme-card:hover {
+    transform: none;
+  }
+
+  .group:hover .theme-hover-motion {
+    transform: none;
+  }
+
+  [data-animate], .page-animate, .board-animate,
+  #hero-bg, #hero-title, #hero-subtitle, #blog-label, #blog-title,
+  #blog-line, #post-hero, #post-title .animate-title, #article-body, #toc,
+  #page-list, #page-list > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

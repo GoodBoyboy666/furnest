@@ -6,6 +6,8 @@ interface Props {
   slug: string
 }
 
+import FurryMark from './FurryMark.astro'
+
 const { title, description, pubDate, slug } = Astro.props
 
 const dateStr = pubDate.toLocaleDateString('zh-CN', {
@@ -15,15 +17,18 @@ const dateStr = pubDate.toLocaleDateString('zh-CN', {
 })
 ---
 
-<a href={`/blog/${slug}`} class="block h-full bg-gray-50 dark:bg-gray-800 rounded-lg p-8 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors no-underline">
+<a href={`/blog/${slug}`} class="theme-surface theme-card group block h-full p-7 no-underline">
   <article class="flex flex-col h-full gap-3">
-    <h3 class="text-xl font-bold text-gray-950 dark:text-gray-100">{title}</h3>
-    <p class="text-base text-gray-600 dark:text-gray-400 line-clamp-3">{description}</p>
+    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface-soft)] text-[var(--color-paw)]">
+      <FurryMark class="h-5 w-5" />
+    </span>
+    <h3 class="text-xl font-bold text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-sky)]">{title}</h3>
+    <p class="text-base text-[var(--color-muted)] line-clamp-3">{description}</p>
     <div class="flex items-center justify-between mt-auto">
-      <time class="text-sm text-gray-500 dark:text-gray-400" datetime={pubDate.toISOString()}>
+      <time class="text-sm text-[var(--color-muted)]" datetime={pubDate.toISOString()}>
         {dateStr}
       </time>
-      <span class="text-sm text-gray-950 dark:text-gray-100">
+      <span class="theme-hover-motion text-sm font-semibold text-[var(--color-paw)] transition-transform group-hover:translate-x-1">
         完整文章 &rarr;
       </span>
     </div>

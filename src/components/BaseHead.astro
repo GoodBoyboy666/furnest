@@ -24,7 +24,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta name="color-scheme" content="light dark" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
-  html.dark { background-color: #111827; }
+  html.dark { background-color: #1d1917; }
 </style>
 <script is:inline>
   if (localStorage.theme === 'dark') {
@@ -46,7 +46,6 @@ const { title, description, image = FallbackImage } = Astro.props;
 </script>
 <ClientRouter />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
 	rel="alternate"

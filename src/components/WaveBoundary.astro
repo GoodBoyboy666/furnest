@@ -1,0 +1,114 @@
+---
+import FooterWave from '../assets/boundaries/footer-wave.svg'
+import HeroWave from '../assets/boundaries/hero-wave.svg'
+
+interface Props {
+  variant: 'hero' | 'footer'
+  class?: string
+}
+
+const { variant, class: className = '' } = Astro.props
+const Wave = variant === 'footer' ? FooterWave : HeroWave
+---
+
+<div class:list={['wave-boundary', `wave-boundary--${variant}`, className]} aria-hidden="true">
+  {
+    variant === 'hero' && (
+      <div class="wave-track wave-track--back">
+        <Wave class="wave-shape" />
+        <Wave class="wave-shape" />
+      </div>
+    )
+  }
+  <div class="wave-track wave-track--front">
+    <Wave class="wave-shape" />
+    <Wave class="wave-shape" />
+  </div>
+</div>
+
+<style>
+  .wave-boundary {
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    overflow: hidden;
+    color: var(--wave-color);
+    user-select: none;
+  }
+
+  .wave-boundary--hero {
+    --wave-color: var(--color-canvas);
+    --wave-highlight: color-mix(in srgb, var(--color-sky) 18%, var(--color-canvas));
+    bottom: -1px;
+    height: 4rem;
+  }
+
+  .wave-boundary--footer {
+    --wave-color: var(--color-surface-soft);
+    top: -5rem;
+    height: 6rem;
+  }
+
+  .wave-track {
+    position: absolute;
+    inset: 0 auto 0 0;
+    display: flex;
+    width: 200%;
+    will-change: transform;
+  }
+
+  .wave-track--back {
+    color: var(--wave-highlight);
+    opacity: .48;
+    transform: translateY(-8%);
+    animation: wave-drift-back 28s linear infinite;
+  }
+
+  .wave-track--front {
+    color: var(--wave-color);
+    animation: wave-drift 20s linear infinite;
+  }
+
+  .wave-shape {
+    display: block;
+    width: 50%;
+    height: 100%;
+    flex: none;
+  }
+
+  @keyframes wave-drift {
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @keyframes wave-drift-back {
+    from { transform: translate3d(-50%, -8%, 0); }
+    to { transform: translate3d(0, -8%, 0); }
+  }
+
+  @media (min-width: 640px) {
+    .wave-boundary--hero { height: 5rem; }
+  }
+
+  @media (min-width: 768px) {
+    .wave-boundary--footer {
+      top: -6rem;
+      height: 7rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .wave-boundary--hero { height: 6rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave-track {
+      animation: none;
+      will-change: auto;
+    }
+
+    .wave-track--front { transform: translateX(-12.5%); }
+    .wave-track--back { transform: translate3d(-37.5%, -8%, 0); }
+  }
+</style>

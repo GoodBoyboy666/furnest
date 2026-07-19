@@ -1,0 +1,15 @@
+---
+import EarsMark from '../assets/marks/ears.svg'
+import PawMark from '../assets/marks/paw.svg'
+import TuftMark from '../assets/marks/tuft.svg'
+
+interface Props {
+  variant?: 'paw' | 'ears' | 'tuft'
+  class?: string
+}
+
+const { variant = 'paw', class: className = '' } = Astro.props
+const Mark = variant === 'ears' ? EarsMark : variant === 'tuft' ? TuftMark : PawMark
+---
+
+<Mark class={className} aria-hidden="true" focusable="false" />

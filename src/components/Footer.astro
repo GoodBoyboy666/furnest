@@ -1,60 +1,66 @@
 ---
 import { Image } from 'astro:assets'
 import avatar from '../assets/avatar.png'
+import FurryMark from './FurryMark.astro'
+import WaveBoundary from './WaveBoundary.astro'
 
 const today = new Date()
 ---
 
-<footer class="bg-gray-50 dark:bg-gray-800 w-full">
+<footer class="relative mt-20 w-full bg-[var(--color-surface-soft)] md:mt-24">
+  <WaveBoundary variant="footer" class="footer-boundary" />
   <div class="flex flex-col lg:flex-row gap-8 lg:gap-0 py-8 px-4 sm:px-8 lg:px-16 mx-auto max-w-[1920px]">
     <div class="flex-1 flex justify-center">
       <div class="w-full max-w-md grid grid-cols-3 gap-x-2 sm:gap-x-6">
         <div class="min-w-0 flex flex-col gap-6">
-          <span class="text-xl font-medium text-gray-950 dark:text-gray-100">| 服务</span>
+          <span class="text-xl font-medium text-[var(--color-ink)]">| 服务</span>
           <div class="flex flex-col gap-4">
-            <a href="#" class="text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:text-gray-600 dark:hover:text-gray-400 transition-colors">网站地图</a>
-            <a href="/rss.xml" class="text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:text-gray-600 dark:hover:text-gray-400 transition-colors">RSS订阅</a>
+            <a href="#" class="text-base font-light text-[var(--color-ink)] no-underline hover:text-[var(--color-sky)] transition-colors">网站地图</a>
+            <a href="/rss.xml" class="text-base font-light text-[var(--color-ink)] no-underline hover:text-[var(--color-sky)] transition-colors">RSS订阅</a>
           </div>
         </div>
         <div class="min-w-0 flex flex-col gap-6">
-          <span class="text-xl font-medium text-gray-950 dark:text-gray-100">| 协议</span>
+          <span class="text-xl font-medium text-[var(--color-ink)]">| 协议</span>
           <div class="flex flex-col gap-4">
-            <a href="#" class="text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Cookie协议</a>
-            <a href="#" class="text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:text-gray-600 dark:hover:text-gray-400 transition-colors">隐私协议</a>
+            <a href="#" class="text-base font-light text-[var(--color-ink)] no-underline hover:text-[var(--color-sky)] transition-colors">Cookie协议</a>
+            <a href="#" class="text-base font-light text-[var(--color-ink)] no-underline hover:text-[var(--color-sky)] transition-colors">隐私协议</a>
           </div>
         </div>
         <div class="min-w-0 flex flex-col gap-6">
-          <span class="text-xl font-medium text-gray-950 dark:text-gray-100">| 链接</span>
+          <span class="text-xl font-medium text-[var(--color-ink)]">| 链接</span>
           <div class="flex flex-col gap-4">
-            <a href="/friends" class="text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:text-gray-600 dark:hover:text-gray-400 transition-colors">友情链接</a>
+            <a href="/friends" class="text-base font-light text-[var(--color-ink)] no-underline hover:text-[var(--color-sky)] transition-colors">友情链接</a>
           </div>
         </div>
       </div>
     </div>
     <div class="flex-1 flex justify-center">
       <div class="flex flex-col items-center gap-2">
-        <Image src={avatar} alt="" class="w-[65px] h-[65px] rounded-2xl object-cover" inferSize />
-        <span class="text-xl font-medium text-gray-950 dark:text-gray-100">FurWolf Creation</span>
-        <span class="text-base font-light text-gray-950 dark:text-gray-100">绒狼创意-探新求异</span>
+        <div class="relative">
+          <Image src={avatar} alt="" class="w-[65px] h-[65px] rounded-2xl border-2 border-[var(--color-border)] object-cover shadow-[var(--shadow-soft)]" inferSize />
+          <FurryMark class="absolute -right-3 -bottom-2 h-7 w-7 rotate-12 text-[var(--color-paw)]" />
+        </div>
+        <span class="text-xl font-medium text-[var(--color-ink)]">FurWolf Creation</span>
+        <span class="text-base font-light text-[var(--color-muted)]">绒狼创意-探新求异</span>
       </div>
     </div>
   </div>
 
-  <hr class="footer-line border-gray-300 dark:border-gray-700 w-full origin-left" />
+  <hr class="footer-line border-[var(--color-border)] w-full origin-left" />
 
   <div class="flex flex-col md:flex-row items-center gap-4 md:gap-0 py-6 px-4 sm:px-8 lg:px-16 mx-auto max-w-[1920px]">
     <div class="flex-1 flex justify-center">
       <div class="flex flex-col gap-1 text-center md:text-left">
-        <span class="text-sm font-light text-gray-950 dark:text-gray-100">Powered by Astro 7.0.7 &amp; Furnest 1.0.0</span>
-        <span class="text-sm font-light text-gray-950 dark:text-gray-100">
+        <span class="text-sm font-light text-[var(--color-muted)]">Powered by Astro 7.0.7 &amp; Furnest 1.0.0</span>
+        <span class="text-sm font-light text-[var(--color-muted)]">
           Copyright &copy; 2015-{today.getFullYear()} GoodBoyboy All Rights Reserved.
         </span>
       </div>
     </div>
     <div class="flex-1 flex flex-wrap justify-center gap-x-4 gap-y-1">
-      <span class="text-sm font-light text-gray-950 dark:text-gray-100">XICP备2026xxxxxx号</span>
-      <span class="text-sm font-light text-gray-950 dark:text-gray-100">X公网安备xxxxxxxxxxxxxx号</span>
-      <span class="text-sm font-light text-gray-950 dark:text-gray-100">CC BY-NC-SA 4.0</span>
+      <span class="text-sm font-light text-[var(--color-muted)]">XICP备2026xxxxxx号</span>
+      <span class="text-sm font-light text-[var(--color-muted)]">X公网安备xxxxxxxxxxxxxx号</span>
+      <span class="text-sm font-light text-[var(--color-muted)]">CC BY-NC-SA 4.0</span>
     </div>
   </div>
 </footer>

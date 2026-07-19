@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header'
+import FurryMark from '../components/FurryMark.astro'
 import { SITE_TITLE } from '../consts'
 ---
 
@@ -12,13 +13,18 @@ import { SITE_TITLE } from '../consts'
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load pathname={Astro.url.pathname} />
-    <main class="flex-1 py-20 px-8">
-      <div class="max-w-3xl mx-auto">
-        <div id="page-title" class="mb-6">
-          <span class="page-animate block text-2xl font-medium text-gray-950 dark:text-gray-100 opacity-0">ABOUT</span>
-          <h1 class="page-animate text-5xl font-medium text-gray-950 dark:text-gray-100 mt-3 opacity-0">| 关于</h1>
+    <main class="flex-1 py-20 px-6 sm:px-8">
+      <div class="max-w-4xl mx-auto">
+        <div id="page-title" class="relative mb-12 overflow-hidden border-y border-[var(--color-border)] py-10 sm:py-14">
+          <div class="relative border-l-4 border-[var(--color-paw)] pl-6 sm:pl-9">
+            <FurryMark variant="ears" class="page-animate mb-5 h-12 w-24 text-[var(--color-paw)] opacity-0" />
+            <span class="page-animate theme-kicker block text-2xl opacity-0">ABOUT THE NEST</span>
+            <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">关于</h1>
+            <p class="page-animate theme-muted mt-5 max-w-xl text-lg opacity-0">一处收拢创作、探索与日常发现的温暖小窝。</p>
+          </div>
+          <FurryMark variant="paw" class="absolute -bottom-10 right-1 h-36 w-36 rotate-12 text-[var(--color-sky)] opacity-10 sm:right-8" />
         </div>
-        <div id="page-list" class="prose prose-lg prose-gray dark:prose-invert max-w-none opacity-0">
+        <div id="page-list" class="prose prose-lg max-w-none border-l border-[var(--color-border)] pl-6 opacity-0 sm:pl-10 prose-headings:text-[var(--color-ink)] prose-p:text-[var(--color-muted)]">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
             labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
@@ -40,31 +46,6 @@ import { SITE_TITLE } from '../consts'
 </html>
 
 <script>
-  import { animate, stagger } from 'motion'
-
-  document.addEventListener('astro:page-load', () => {
-    const items = document.querySelectorAll('#page-title .page-animate')
-    animate(
-      Array.from(items),
-      { opacity: [0, 1], y: [20, 0] },
-      { duration: 0.4, delay: stagger(0.1), easing: 'ease-out' }
-    )
-
-    const listEl = document.getElementById('page-list')
-    if (listEl) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animate(
-              entry.target,
-              { opacity: [0, 1], y: [20, 0] },
-              { duration: 0.5, easing: 'ease-out' }
-            )
-            observer.unobserve(entry.target)
-          }
-        })
-      }, { threshold: 0.05 })
-      observer.observe(listEl)
-    }
-  })
+  import { initListPageAnimations } from '../scripts/list-page-animations'
+  document.addEventListener('astro:page-load', () => initListPageAnimations('page-title', 'page-list'))
 </script>

@@ -1,11 +1,30 @@
-import { animate, stagger } from 'motion'
+import { stagger } from 'motion'
+import { animateElements } from './animate-elements'
 
 export function initListPageAnimations(titleContainerId: string, listId: string) {
+  const container = document.getElementById(titleContainerId)
+  const listEl = document.getElementById(listId)
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    container?.querySelectorAll<HTMLElement>('.page-animate').forEach((el) => {
+      el.style.opacity = '1'
+      el.style.transform = 'none'
+    })
+    if (listEl) {
+      listEl.style.opacity = '1'
+      Array.from(listEl.children).forEach((child) => {
+        const el = child as HTMLElement
+        el.style.opacity = '1'
+        el.style.transform = 'none'
+      })
+    }
+    return
+  }
+
   requestAnimationFrame(() => {
-    const container = document.getElementById(titleContainerId)
     if (container) {
-      const items = container.querySelectorAll('.page-animate')
-      animate(
+      const items = container.querySelectorAll<HTMLElement>('.page-animate')
+      animateElements(
         Array.from(items),
         { opacity: [0, 1], y: [20, 0] },
         { duration: 0.4, delay: stagger(0.1), easing: 'ease-out' }
@@ -13,15 +32,15 @@ export function initListPageAnimations(titleContainerId: string, listId: string)
     }
   })
 
-  const listEl = document.getElementById(listId)
   if (!listEl) return
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && entry.target.children.length > 0) {
-        entry.target.style.opacity = '1'
-        animate(
-          Array.from(entry.target.children),
+        const target = entry.target as HTMLElement
+        target.style.opacity = '1'
+        animateElements(
+          Array.from(target.children) as HTMLElement[],
           { opacity: [0, 1], y: [20, 0] },
           { duration: 0.5, delay: stagger(0.12), easing: 'ease-out' }
         )

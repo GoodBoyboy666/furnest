@@ -5,6 +5,7 @@ import BlogCard from '../../../components/BlogCard.astro'
 import Footer from '../../../components/Footer.astro'
 import Header from '../../../components/Header'
 import Pagination from '../../../components/Pagination.astro'
+import FurryMark from '../../../components/FurryMark.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts'
 
 import type { GetStaticPathsResult, Page } from 'astro'
@@ -32,9 +33,10 @@ const nextUrl = page.url.next
     <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1">
       <section class="flex flex-col items-center py-20 px-8">
-        <span id="blog-label" class="text-2xl font-medium text-gray-950 opacity-0 translate-y-5">BLOG ARTICLES</span>
-        <h1 id="blog-title" class="text-5xl font-medium text-gray-950 mt-4 mb-8 opacity-0 translate-y-5">| 博客文章</h1>
-        <hr id="blog-line" class="border-gray-300 border-t-2 w-full max-w-5xl mb-12 origin-left opacity-0" />
+        <FurryMark variant="paw" class="mb-3 h-10 w-10 text-[var(--color-paw)]" />
+        <span id="blog-label" class="theme-kicker text-2xl opacity-0 translate-y-5">BLOG ARTICLES</span>
+        <h1 id="blog-title" class="theme-heading text-5xl font-medium mt-4 mb-8 opacity-0 translate-y-5">博客文章</h1>
+        <hr id="blog-line" class="theme-rule border-t-2 w-full max-w-5xl mb-12 origin-left opacity-0" />
 
         <div id="blog-list" class="flex flex-col gap-8 max-w-5xl w-full">
           {

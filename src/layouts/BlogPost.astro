@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Header from '../components/Header'
+import FurryMark from '../components/FurryMark.astro'
 
 type Props = CollectionEntry<'blog'>['data']
 
@@ -17,39 +18,40 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load pathname={Astro.url.pathname} />
-    <main class="flex-1 pt-8 pb-20 px-8">
+    <main class="flex-1 px-5 pt-8 pb-20 sm:px-8">
       <article class="mx-auto max-w-6xl">
         {
           heroImage && (
-            <div id="post-hero" class="mb-8 opacity-0">
-              <Image src={heroImage} alt="" class="block mx-auto rounded-xl shadow-lg w-full max-w-4xl" width={1020} height={510} />
+            <div id="post-hero" class="theme-surface mx-auto mb-8 max-w-4xl overflow-hidden p-2 opacity-0">
+              <Image src={heroImage} alt="" class="block w-full rounded-2xl" width={1020} height={510} />
             </div>
           )
         }
         <div id="post-title" class="text-center mb-12">
-          <div class="animate-title text-sm text-gray-500 dark:text-gray-400 mb-2 opacity-0">
+          <FurryMark variant="paw" class="animate-title mx-auto mb-3 h-9 w-9 text-[var(--color-paw)] opacity-0" />
+          <div class="animate-title text-sm text-[var(--color-muted)] mb-2 opacity-0">
             <FormattedDate date={pubDate} />
             {updatedDate && (
-              <span class="text-sm text-gray-400 dark:text-gray-500 italic">
+              <span class="text-sm text-[var(--color-muted)] italic">
                 &nbsp;&middot; Last updated on <FormattedDate date={updatedDate} />
               </span>
             )}
           </div>
-          <h1 data-pagefind-body data-pagefind-meta="title" class="animate-title text-4xl font-bold text-gray-950 dark:text-gray-100 opacity-0">{title}</h1>
-          <hr class="animate-title mt-6 border-gray-200 dark:border-gray-800 opacity-0" />
+          <h1 data-pagefind-body data-pagefind-meta="title" class="animate-title text-4xl font-bold text-[var(--color-ink)] opacity-0">{title}</h1>
+          <hr class="animate-title theme-rule mt-6 opacity-0" />
         </div>
 
         <div class="flex justify-center gap-12">
           <div id="article-wrapper" class="max-w-3xl w-full">
-            <div id="article-body" data-pagefind-body class="prose prose-lg prose-gray dark:prose-invert opacity-0">
+            <div id="article-body" data-pagefind-body class="article-prose prose prose-lg max-w-none opacity-0">
               <slot />
             </div>
           </div>
 
           <aside id="toc" class="hidden xl:block sticky top-24 w-56 shrink-0 self-start opacity-0">
             <nav>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">目录</h3>
-              <ul id="toc-list" class="text-sm space-y-0.5 border-l border-gray-200 dark:border-gray-800 pl-4"></ul>
+              <h3 class="text-sm font-semibold text-[var(--color-paw)] uppercase tracking-wide mb-4">目录</h3>
+              <ul id="toc-list" class="text-sm space-y-0.5 border-l border-[var(--color-border)] pl-4"></ul>
             </nav>
           </aside>
         </div>
@@ -60,108 +62,125 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
 </html>
 
 <script>
-  import { animate, stagger } from 'motion'
+  import { stagger } from 'motion'
+  import { animateElements } from '../scripts/animate-elements'
 
   document.addEventListener('astro:page-load', () => {
-  const articleBody = document.getElementById('article-body')
-  const tocList = document.getElementById('toc-list')
-  if (!articleBody || !tocList) {
-    const tocEl = document.getElementById('toc')
-    if (tocEl) tocEl.style.display = 'none'
-  } else {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const articleBody = document.getElementById('article-body')
+    const tocList = document.getElementById('toc-list')
+    if (!articleBody || !tocList) {
+      const tocEl = document.getElementById('toc')
+      if (tocEl) tocEl.style.display = 'none'
+    } else {
       document.getElementById('toc')!.style.display = ''
       tocList.innerHTML = ''
       const headings = articleBody.querySelectorAll('h2, h3, h4')
-    if (headings.length === 0) {
-      document.getElementById('toc')!.style.display = 'none'
-    } else {
-      const items: { id: string; text: string; level: number; el: HTMLElement }[] = []
+      if (headings.length === 0) {
+        document.getElementById('toc')!.style.display = 'none'
+      } else {
+        const items: { id: string; text: string; level: number; el: HTMLElement }[] = []
 
-      headings.forEach((heading) => {
-        const el = heading as HTMLElement
-        const level = parseInt(el.tagName.charAt(1))
-        if (!el.id) {
-          el.id = el.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '') || ''
-        }
-        el.style.scrollMarginTop = '5rem'
-        items.push({ id: el.id, text: el.textContent || '', level, el })
+        headings.forEach((heading) => {
+          const el = heading as HTMLElement
+          const level = parseInt(el.tagName.charAt(1))
+          if (!el.id) {
+            el.id = el.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '') || ''
+          }
+          el.style.scrollMarginTop = '5rem'
+          items.push({ id: el.id, text: el.textContent || '', level, el })
+        })
+
+        items.forEach((item) => {
+          const li = document.createElement('li')
+          const a = document.createElement('a')
+          a.href = `#${item.id}`
+          a.textContent = item.text
+          const indent = item.level === 2 ? '' : item.level === 3 ? 'ml-3 text-xs' : 'ml-6 text-xs'
+          a.className = `block no-underline transition-colors rounded-lg px-3 py-1 -ml-3 toc-link ${indent}`
+          li.appendChild(a)
+          tocList.appendChild(li)
+        })
+
+        const links = tocList.querySelectorAll('.toc-link')
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                links.forEach((l) => l.classList.remove('toc-active'))
+                const active = tocList.querySelector(`[href="#${entry.target.id}"]`)
+                if (active) active.classList.add('toc-active')
+              }
+            })
+          },
+          { rootMargin: '-80px 0px -80% 0px', threshold: 0 }
+        )
+        headings.forEach((h) => observer.observe(h))
+
+        if (reduceMotion) {
+          const tocEl = document.getElementById('toc')!
+          tocEl.style.opacity = '1'
+          tocEl.style.transform = 'none'
+        } else requestAnimationFrame(() => {
+          const tocEl = document.getElementById('toc')!
+          animateElements(tocEl, { opacity: [0, 1], x: [32, 0] }, { duration: 0.5, easing: 'ease-out' })
+        })
+      }
+    }
+
+    const heroEl = document.getElementById('post-hero')
+    if (heroEl) {
+      if (reduceMotion) heroEl.style.opacity = '1'
+      else requestAnimationFrame(() => {
+        animateElements(heroEl, { opacity: [0, 1] }, { duration: 0.6, easing: 'ease-out' })
       })
+    }
 
-      items.forEach((item) => {
-        const li = document.createElement('li')
-        const a = document.createElement('a')
-        a.href = `#${item.id}`
-        a.textContent = item.text
-        const indent = item.level === 2 ? '' : item.level === 3 ? 'ml-3 text-xs' : 'ml-6 text-xs'
-        a.className = `block no-underline text-gray-500 dark:text-gray-400 hover:text-gray-950 dark:hover:text-gray-100 transition-colors rounded-lg px-3 py-1 -ml-3 toc-link ${indent}`
-        li.appendChild(a)
-        tocList.appendChild(li)
+    if (reduceMotion) {
+      document.querySelectorAll<HTMLElement>('#post-title .animate-title').forEach((el) => {
+        el.style.opacity = '1'
+        el.style.transform = 'none'
       })
-
-      const links = tocList.querySelectorAll('.toc-link')
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              links.forEach((l) => l.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-950', 'dark:text-gray-100', 'font-medium'))
-              const active = tocList.querySelector(`[href="#${entry.target.id}"]`)
-              if (active) active.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-950', 'dark:text-gray-100', 'font-medium')
-            }
-          })
-        },
-        { rootMargin: '-80px 0px -80% 0px', threshold: 0 }
+    } else requestAnimationFrame(() => {
+      const titleItems = document.querySelectorAll('#post-title .animate-title')
+      animateElements(
+        Array.from(titleItems),
+        { opacity: [0, 1], y: [-20, 0] },
+        { duration: 0.4, delay: stagger(0.12), easing: 'ease-out' }
       )
-      headings.forEach((h) => observer.observe(h))
+    })
+
+    const bodyEl = document.getElementById('article-body')
+    if (bodyEl) {
+      if (reduceMotion) {
+        bodyEl.style.opacity = '1'
+        bodyEl.style.transform = 'none'
+        return
+      }
+      let bodyAnimated = false
+
+      const animateBody = () => {
+        if (bodyAnimated) return
+        bodyAnimated = true
+        animateElements(bodyEl, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, easing: 'ease-out' })
+      }
 
       requestAnimationFrame(() => {
-        const tocEl = document.getElementById('toc')!
-        animate(tocEl, { opacity: [0, 1], x: [32, 0] }, { duration: 0.5, easing: 'ease-out' })
-      })
-    }
-  }
-
-  const heroEl = document.getElementById('post-hero')
-  if (heroEl) {
-    requestAnimationFrame(() => {
-      animate(heroEl, { opacity: [0, 1] }, { duration: 0.6, easing: 'ease-out' })
-    })
-  }
-
-  requestAnimationFrame(() => {
-    const titleItems = document.querySelectorAll('#post-title .animate-title')
-    animate(
-      Array.from(titleItems),
-      { opacity: [0, 1], y: [-20, 0] },
-      { duration: 0.4, delay: stagger(0.12), easing: 'ease-out' }
-    )
-  })
-
-  const bodyEl = document.getElementById('article-body')
-  if (bodyEl) {
-    let bodyAnimated = false
-
-    const animateBody = () => {
-      if (bodyAnimated) return
-      bodyAnimated = true
-      animate(bodyEl, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, easing: 'ease-out' })
-    }
-
-    requestAnimationFrame(() => {
-      const rect = bodyEl.getBoundingClientRect()
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        animateBody()
-      }
-    })
-
-    const bodyObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        const rect = bodyEl.getBoundingClientRect()
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
           animateBody()
-          bodyObserver.unobserve(entry.target)
         }
       })
-    }, { threshold: 0.05 })
-    bodyObserver.observe(bodyEl)
-  }
+
+      const bodyObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateBody()
+            bodyObserver.unobserve(entry.target)
+          }
+        })
+      }, { threshold: 0.05 })
+      bodyObserver.observe(bodyEl)
+    }
   })
 </script>

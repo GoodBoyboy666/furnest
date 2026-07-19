@@ -139,8 +139,9 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
     return href === pathname || href === '/' + (subpath?.[0] || '')
   }
 
-  const linkColor = isHome && !scrolled ? 'text-white hover:text-gray-300' : 'text-gray-950 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400'
-  const bgColor = isHome && !scrolled ? 'bg-transparent' : 'bg-white dark:bg-gray-900'
+  const overHero = isHome && !scrolled
+  const linkColor = overHero ? 'text-white hover:text-[#ffd7b8]' : 'text-[var(--color-ink)] hover:text-[var(--color-sky)]'
+  const bgColor = overHero ? 'bg-transparent' : 'bg-[color:var(--color-surface)]/95 border-b border-[var(--color-border)] shadow-[var(--shadow-soft)] backdrop-blur-md'
   const position = isHome ? 'fixed' : 'sticky'
 
   const toggleDark = useCallback(() => {
@@ -156,64 +157,73 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
   }, [dark])
 
   return (
-    <header className={`${position} top-0 left-0 w-full z-50 rounded-b-lg transition-all duration-300 ${bgColor}`}>
-      <nav className="flex items-center justify-between py-4 px-4 sm:px-8 lg:px-16">
-        <a href="/" className={`text-2xl font-medium italic no-underline transition-colors duration-300 ${linkColor}`}>
-          Furnest
+    <header className={`${position} top-0 left-0 w-full z-50 rounded-b-2xl transition-all duration-300 ${bgColor}`}>
+      <nav className="flex items-center justify-between py-4 px-4 sm:px-8 xl:px-16">
+        <a href="/" className={`group flex items-end gap-2 text-2xl font-semibold italic no-underline transition-colors duration-300 ${linkColor}`}>
+          <span className="relative leading-none">
+            <svg viewBox="0 0 48 24" className="absolute -top-3 left-1/2 h-4 w-8 -translate-x-1/2" fill="none" aria-hidden="true" focusable="false">
+              <path d="M4 20 8 4l15 13M44 20 40 4 25 17" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Furnest
+          </span>
+          <span className={`hidden text-[10px] not-italic tracking-[.16em] xl:inline ${overHero ? 'text-white/75' : 'text-[var(--color-muted)]'}`}>WARM NEST</span>
         </a>
 
-        <div className="hidden md:flex gap-16">
+        <div className="hidden gap-4 md:flex lg:gap-10 xl:gap-16">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className={`text-base font-light no-underline transition-colors ${linkColor} ${isActive(link.href) ? 'font-bold underline underline-offset-4' : ''}`}
+              className={`rounded-full px-2 py-1 text-base font-light no-underline transition-colors ${linkColor} ${isActive(link.href) ? overHero ? 'bg-white/15 font-bold' : 'bg-[var(--color-surface-soft)] font-bold text-[var(--color-paw)]' : ''}`}
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex items-center gap-1 sm:gap-3">
           <button
             ref={searchButtonRef}
             type="button"
             onClick={() => void openSearch()}
-            className={`transition-colors duration-300 ${linkColor}`}
+            className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`}
             aria-label="搜索"
             aria-keyshortcuts="Control+K Meta+K"
             aria-haspopup="dialog"
           >
             <Search size={24} />
           </button>
-          <a href="#" className={`transition-colors duration-300 ${linkColor}`} aria-label="外链">
+          <a href="#" className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`} aria-label="外链">
             <SquareArrowOutUpRight size={24} />
           </a>
           <button
             onClick={toggleDark}
-            className={`transition-colors duration-300 ${linkColor}`}
+            className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`}
             aria-label="切换暗黑模式"
           >
             {dark ? <Sun size={24} /> : <Moon size={24} />}
           </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className={`md:hidden transition-colors duration-300 ${linkColor}`}
+            className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 md:hidden ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`}
             aria-label="菜单"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </nav>
 
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shadow-lg ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div id="mobile-navigation" aria-hidden={!menuOpen} className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-lg ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="flex flex-col py-2">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className={`block px-6 py-3 text-base font-light text-gray-950 dark:text-gray-100 no-underline hover:bg-gray-50 dark:hover:bg-gray-800 ${isActive(link.href) ? 'font-bold underline underline-offset-4' : ''}`}
+              tabIndex={menuOpen ? undefined : -1}
+              className={`mx-3 block rounded-xl px-4 py-3 text-base font-light text-[var(--color-ink)] no-underline hover:bg-[var(--color-surface-soft)] ${isActive(link.href) ? 'font-bold text-[var(--color-paw)]' : ''}`}
             >
               {link.label}
             </a>
@@ -227,7 +237,7 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
 
       {searchUnavailable && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-labelledby="search-unavailable-title"
@@ -238,10 +248,10 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
             }
           }}
         >
-          <div className="w-full max-w-sm rounded-xl bg-white p-6 text-gray-950 shadow-2xl dark:bg-gray-800 dark:text-gray-100">
+          <div className="theme-surface w-full max-w-sm p-6">
             <h2 id="search-unavailable-title" className="text-lg font-semibold">搜索暂不可用</h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">请先运行 pnpm build 后重试；若仍不可用，请重启开发服务器。</p>
-            <button type="button" onClick={closeUnavailableSearch} autoFocus className="mt-5 rounded-lg bg-gray-950 px-4 py-2 text-sm text-white dark:bg-gray-100 dark:text-gray-950">
+            <p className="theme-muted mt-2 text-sm">请先运行 pnpm build 后重试；若仍不可用，请重启开发服务器。</p>
+            <button type="button" onClick={closeUnavailableSearch} autoFocus className="mt-5 rounded-full bg-[var(--color-paw)] px-4 py-2 text-sm font-semibold text-white">
               关闭
             </button>
           </div>
