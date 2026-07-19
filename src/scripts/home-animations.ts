@@ -2,9 +2,13 @@ import { stagger } from 'motion'
 import { animateElements } from './animate-elements'
 
 export function initHomeAnimations() {
+  const heroBg = document.getElementById('hero-bg')
+  if (!heroBg || heroBg.dataset.animationInitialized === 'true') return
+  heroBg.dataset.animationInitialized = 'true'
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduceMotion) {
-    document.querySelectorAll<HTMLElement>('#hero-bg, #hero-title, #hero-subtitle, .board-animate, .board-line, #card-grid > *, footer > :not(.footer-boundary)').forEach((el) => {
+    document.querySelectorAll<HTMLElement>('#hero-bg, .hero-ears, #hero-creation, #hero-title, #hero-subtitle, .board-animate, .board-line, #card-grid > *, footer > :not(.footer-boundary)').forEach((el) => {
       el.style.opacity = '1'
       el.style.transform = 'none'
     })
@@ -12,10 +16,13 @@ export function initHomeAnimations() {
   }
 
   requestAnimationFrame(() => {
-    const heroBg = document.getElementById('hero-bg')
+    const heroEars = document.querySelector<HTMLElement>('.hero-ears')
+    const heroCreation = document.getElementById('hero-creation')
     const heroTitle = document.getElementById('hero-title')
     const heroSubtitle = document.getElementById('hero-subtitle')
-    if (heroBg) animateElements(heroBg, { opacity: [0, 1] }, { duration: 0.6, easing: 'ease-out' })
+    animateElements(heroBg, { opacity: [0, 1] }, { duration: 0.6, easing: 'ease-out' })
+    if (heroEars) animateElements(heroEars, { opacity: [0, 1], y: [-20, 0] }, { duration: 0.4, easing: 'ease-out' })
+    if (heroCreation) animateElements(heroCreation, { opacity: [0, 1], y: [-20, 0] }, { duration: 0.4, delay: 0.1, easing: 'ease-out' })
     if (heroTitle) animateElements(heroTitle, { opacity: [0, 1], y: [40, 0] }, { duration: 0.4, easing: [0.25, 0.46, 0.45, 0.94] })
     if (heroSubtitle) animateElements(heroSubtitle, { opacity: [0, 1], y: [24, 0] }, { duration: 0.4, delay: 0.15, easing: [0.25, 0.46, 0.45, 0.94] })
   })

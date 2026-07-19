@@ -27,7 +27,8 @@ for (const post of posts) {
     <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1 py-20 px-8">
       <div class="max-w-3xl mx-auto">
-        <div id="page-title" class="mb-10 border-l-4 border-[var(--color-paw)] pl-6 sm:pl-9">
+        <div id="page-title" class="relative mb-10 border-l-4 border-transparent pl-6 sm:pl-9">
+          <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)] opacity-0" aria-hidden="true"></span>
           <span class="page-animate theme-kicker block text-2xl opacity-0">ARCHIVE</span>
           <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">归档</h1>
         </div>

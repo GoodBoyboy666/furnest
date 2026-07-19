@@ -2,8 +2,12 @@ import { stagger } from 'motion'
 import { animateElements } from './animate-elements'
 
 export function initBlogListAnimations() {
+  const blogList = document.getElementById('blog-list')
+  if (!blogList || blogList.dataset.animationInitialized === 'true') return
+  blogList.dataset.animationInitialized = 'true'
+
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll<HTMLElement>('#blog-label, #blog-title, #blog-line, [data-animate]').forEach((el) => {
+    document.querySelectorAll<HTMLElement>('.blog-paw, #blog-label, #blog-title, #blog-line, [data-animate]').forEach((el) => {
       el.style.opacity = '1'
       el.style.transform = 'none'
     })
@@ -11,15 +15,15 @@ export function initBlogListAnimations() {
   }
 
   requestAnimationFrame(() => {
+    const paw = document.querySelector<HTMLElement>('.blog-paw')
     const label = document.getElementById('blog-label')
     const title = document.getElementById('blog-title')
     const line = document.getElementById('blog-line')
+    if (paw) animateElements(paw, { opacity: [0, 1], y: [-20, 0] }, { duration: 0.4, easing: 'ease-out' })
     if (label) animateElements(label, { opacity: [0, 1], y: [20, 0] }, { duration: 0.4, easing: 'ease-out' })
     if (title) animateElements(title, { opacity: [0, 1], y: [20, 0] }, { duration: 0.4, delay: 0.1, easing: 'ease-out' })
     if (line) animateElements(line, { scaleX: [0, 1], opacity: [0, 1] }, { duration: 0.6, delay: 0.2, easing: 'ease-out' })
   })
-
-  const blogList = document.getElementById('blog-list')
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -37,5 +41,5 @@ export function initBlogListAnimations() {
     })
   }, { threshold: 0.1 })
 
-  if (blogList) observer.observe(blogList)
+  observer.observe(blogList)
 }

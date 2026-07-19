@@ -163,8 +163,8 @@ body {
     transform: none;
   }
 
-  [data-animate], .page-animate, .board-animate,
-  #hero-bg, #hero-title, #hero-subtitle, #blog-label, #blog-title,
+  [data-animate], .page-animate, .page-accent, .board-animate, .blog-paw,
+  #hero-bg, .hero-ears, #hero-creation, #hero-title, #hero-subtitle, #blog-label, #blog-title,
   #blog-line, #post-hero, #post-title .animate-title, #article-body, #toc,
   #page-list, #page-list > * {
     opacity: 1 !important;
