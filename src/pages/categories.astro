@@ -56,7 +56,7 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
                     })
                     return (
                       <a href={`/blog/${post.id}`} class="theme-list-link flex items-baseline gap-4 px-3 py-2 -mx-3 no-underline">
-                        <time class="text-sm font-light text-[var(--color-muted)] shrink-0">{dateStr}</time>
+                        <time class="w-28 shrink-0 whitespace-nowrap text-sm font-light text-[var(--color-muted)]">{dateStr}</time>
                         <span class="text-base font-medium truncate">{post.data.title}</span>
                       </a>
                     )
