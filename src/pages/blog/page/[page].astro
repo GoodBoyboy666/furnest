@@ -19,7 +19,7 @@ export async function getStaticPaths({ paginate }: { paginate: (data: any[], opt
   return result.filter((p: any) => p.params.page !== '1')
 }
 
-const { page } = Astro.props
+const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> }
 const prevUrl = page.currentPage === 2 ? '/blog' : page.url.prev
 const nextUrl = page.url.next
 ---
@@ -40,7 +40,7 @@ const nextUrl = page.url.next
 
         <div id="blog-list" class="flex flex-col gap-8 max-w-5xl w-full">
           {
-              page.data.map((post: CollectionEntry<'blog'>) => (
+              page.data.map((post) => (
               <BlogCard
                 title={post.data.title}
                 description={post.data.description}

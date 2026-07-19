@@ -45,8 +45,7 @@ const friends: Friend[] = friendsData
                     alt={friend.name}
                     class="friend-avatar absolute inset-0 h-full w-full object-cover"
                     loading="lazy"
-                    onload="this.hidden = false"
-                    onerror="this.hidden = true"
+                    onerror="this.remove()"
                   />
                 </span>
                 <span class="min-w-0 flex-1">
