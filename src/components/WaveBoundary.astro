@@ -55,7 +55,7 @@ const Wave = variant === 'footer' ? FooterWave : HeroWave
     position: absolute;
     inset: 0 auto 0 0;
     display: flex;
-    width: 200%;
+    width: 300%;
     will-change: transform;
   }
 
@@ -88,6 +88,7 @@ const Wave = variant === 'footer' ? FooterWave : HeroWave
   }
 
   @media (min-width: 640px) {
+    .wave-track { width: 200%; }
     .wave-boundary--hero { height: 5rem; }
   }
 
