@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
-import heroImage from '../assets/hero.webp'
 import ArticleCard from '../components/ArticleCard.astro'
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
@@ -25,11 +23,13 @@ const posts = (await getCollection('blog'))
     <main class="flex-1">
       <section class="relative h-screen min-h-[620px] flex items-center justify-center overflow-hidden">
         <div id="hero-bg" class="absolute inset-0 opacity-0">
-          <Image
-            src={heroImage}
+          <img
+            src="https://api.furry.ist/furry-img/?mode=auto"
             alt=""
             class="w-full h-full object-cover object-[58%_center] sm:object-center"
-            inferSize
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
           />
         </div>
         <div class="absolute inset-0 z-0 bg-[linear-gradient(120deg,rgba(27,21,18,.82),rgba(44,96,125,.38)_55%,rgba(191,91,40,.38)),linear-gradient(to_top,rgba(29,25,23,.7),transparent_55%)]"></div>
