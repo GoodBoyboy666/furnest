@@ -4,7 +4,7 @@ import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header'
 import FurryMark from '../components/FurryMark.astro'
-import { SITE_TITLE } from '../consts'
+import { siteConfig } from '../config'
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -12,22 +12,22 @@ const posts = (await getCollection('blog')).sort(
 
 const grouped = new Map<string, typeof posts>()
 for (const post of posts) {
-  const cat = post.data.category || '未分类'
+  const cat = post.data.category || siteConfig.pages.categories.uncategorizedLabel
   if (!grouped.has(cat)) grouped.set(cat, [])
   grouped.get(cat)!.push(post)
 }
 
 const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
-  if (a[0] === '未分类') return 1
-  if (b[0] === '未分类') return -1
+  if (a[0] === siteConfig.pages.categories.uncategorizedLabel) return 1
+  if (b[0] === siteConfig.pages.categories.uncategorizedLabel) return -1
   return a[0].localeCompare(b[0])
 })
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={siteConfig.site.locale}>
   <head>
-    <BaseHead title={`分类 - ${SITE_TITLE}`} description="文章分类" />
+    <BaseHead title={`${siteConfig.pages.categories.title} - ${siteConfig.site.title}`} description={siteConfig.pages.categories.description} />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load pathname={Astro.url.pathname} />
@@ -35,12 +35,12 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
       <div class="max-w-3xl mx-auto">
         <div id="page-title" class="relative mb-10 border-l-4 border-transparent pl-6 sm:pl-9">
           <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)] opacity-0" aria-hidden="true"></span>
-          <span class="page-animate theme-kicker block text-2xl opacity-0">CATEGORIES</span>
-          <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">分类</h1>
+          <span class="page-animate theme-kicker block text-2xl opacity-0">{siteConfig.pages.categories.kicker}</span>
+          <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">{siteConfig.pages.categories.title}</h1>
         </div>
         <div id="page-list" class="flex flex-col gap-12">
           {
-            sortedGroups.map(([category, posts]) => (
+            sortedGroups.length > 0 ? sortedGroups.map(([category, posts]) => (
               <section class="opacity-0">
                 <h2 class="flex items-center gap-3 text-2xl font-bold text-[var(--color-ink)] mb-4">
                   <FurryMark variant="paw" class="h-6 w-6 text-[var(--color-paw)]" />
@@ -50,7 +50,7 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
                 <hr class="theme-rule mb-4" />
                 <div class="flex flex-col gap-3">
                   {posts.map((post) => {
-                    const dateStr = post.data.pubDate.toLocaleDateString('zh-CN', {
+                      const dateStr = post.data.pubDate.toLocaleDateString(siteConfig.site.contentDateLocale, {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
@@ -64,7 +64,7 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
                   })}
                 </div>
               </section>
-            ))
+            )) : <p class="theme-muted text-lg">{siteConfig.pages.categories.emptyState}</p>
           }
         </div>
       </div>

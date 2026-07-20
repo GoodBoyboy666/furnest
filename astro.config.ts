@@ -6,6 +6,7 @@ import type { AstroIntegration } from 'astro';
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sirv from 'sirv';
+import { siteConfig } from './src/config';
 
 const pagefindDevAssets: AstroIntegration = {
   name: 'pagefind-dev-assets',
@@ -17,7 +18,7 @@ const pagefindDevAssets: AstroIntegration = {
 };
 
 export default defineConfig({
-  site: 'https://example.com',
+  site: siteConfig.site.url,
   integrations: [mdx(), sitemap(), react(), pagefindDevAssets],
   vite: { plugins: [tailwindcss()] },
   fonts: [

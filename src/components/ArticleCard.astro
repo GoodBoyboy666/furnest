@@ -7,10 +7,11 @@ interface Props {
 }
 
 import FurryMark from './FurryMark.astro'
+import { siteConfig } from '../config'
 
 const { title, description, pubDate, slug } = Astro.props
 
-const dateStr = pubDate.toLocaleDateString('zh-CN', {
+const dateStr = pubDate.toLocaleDateString(siteConfig.site.contentDateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',

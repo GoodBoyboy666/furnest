@@ -3,12 +3,14 @@ interface Props {
 	date: Date;
 }
 
+import { siteConfig } from '../config'
+
 const { date } = Astro.props;
 ---
 
 <time datetime={date.toISOString()}>
 	{
-		date.toLocaleDateString('en-us', {
+		date.toLocaleDateString(siteConfig.site.dateLocale, {
 			year: 'numeric',
 			month: 'short',
 			day: 'numeric',

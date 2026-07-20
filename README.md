@@ -1,4 +1,19 @@
-# Astro Starter Kit: Blog
+# Furnest
+
+## DIY Configuration
+
+Edit [`src/config.ts`](src/config.ts) to customize the site without changing
+pages or components. The typed `siteConfig` object contains site metadata and
+locale, brand and owner details, navigation, the home hero, page labels and
+copy, footer/legal records, and blog pagination settings.
+
+Local images can be imported in this file and assigned to image fields. Remove
+optional navigation, footer, or legal entries by deleting them from their
+arrays; empty groups are omitted from the rendered layout. Blog posts remain in
+`src/content/blog/`, and friend links remain in `src/data/friends.json`.
+
+The `site.url` value is shared by Astro's sitemap integration and generated
+metadata/RSS links, so update it when deploying to a new domain.
 
 ```sh
 pnpm create astro@latest -- --template blog

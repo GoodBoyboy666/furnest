@@ -1,13 +1,6 @@
 import { Menu, Moon, Search, SquareArrowOutUpRight, Sun, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-
-const NAV_LINKS = [
-  { href: '/', label: '首页' },
-  { href: '/blog', label: '博客' },
-  { href: '/categories', label: '分类' },
-  { href: '/archive', label: '归档' },
-  { href: '/about', label: '关于' },
-]
+import { siteConfig } from '../config'
 
 interface Props {
   isHome?: boolean
@@ -164,22 +157,24 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
             <svg viewBox="0 0 48 24" className="absolute -top-3 left-1/2 h-4 w-8 -translate-x-1/2" fill="none" aria-hidden="true" focusable="false">
               <path d="M4 20 8 4l15 13M44 20 40 4 25 17" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            Furnest
+             {siteConfig.brand.shortMark}
           </span>
-          <span className={`hidden text-[10px] not-italic tracking-[.16em] xl:inline ${overHero ? 'text-white/75' : 'text-[var(--color-muted)]'}`}>WARM NEST</span>
+          <span className={`hidden text-[10px] not-italic tracking-[.16em] xl:inline ${overHero ? 'text-white/75' : 'text-[var(--color-muted)]'}`}>{siteConfig.brand.eyebrow}</span>
         </a>
 
-        <div className="hidden gap-4 md:flex lg:gap-10 xl:gap-16">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`rounded-full px-2 py-1 text-base font-light no-underline transition-colors ${linkColor} ${isActive(link.href) ? overHero ? 'bg-white/15 font-bold' : 'bg-[var(--color-surface-soft)] font-bold text-[var(--color-paw)]' : ''}`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+        {siteConfig.navigation.primary.length > 0 && (
+          <div className="hidden gap-4 md:flex lg:gap-10 xl:gap-16">
+            {siteConfig.navigation.primary.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`rounded-full px-2 py-1 text-base font-light no-underline transition-colors ${linkColor} ${isActive(link.href) ? overHero ? 'bg-white/15 font-bold' : 'bg-[var(--color-surface-soft)] font-bold text-[var(--color-paw)]' : ''}`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
 
         <div className="flex items-center gap-1 sm:gap-3">
           <button
@@ -193,9 +188,11 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
           >
             <Search size={24} />
           </button>
-          <a href="#" className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`} aria-label="外链">
-            <SquareArrowOutUpRight size={24} />
-          </a>
+          {siteConfig.navigation.external && (
+            <a href={siteConfig.navigation.external.href} className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`} aria-label={siteConfig.navigation.external.label} target={siteConfig.navigation.external.external ? '_blank' : undefined} rel={siteConfig.navigation.external.external ? 'noopener noreferrer' : undefined}>
+              <SquareArrowOutUpRight size={24} />
+            </a>
+          )}
           <button
             onClick={toggleDark}
             className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`}
@@ -203,33 +200,37 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
           >
             {dark ? <Sun size={24} /> : <Moon size={24} />}
           </button>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 md:hidden ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`}
-            aria-label="菜单"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {siteConfig.navigation.primary.length > 0 && (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`rounded-full p-1.5 transition-colors duration-300 sm:p-2 md:hidden ${linkColor} ${overHero ? 'hover:bg-white/15' : 'hover:bg-[var(--color-surface-soft)]'}`}
+              aria-label="菜单"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+            >
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          )}
         </div>
       </nav>
 
-      <div id="mobile-navigation" aria-hidden={!menuOpen} className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-lg ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="flex flex-col py-2">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              tabIndex={menuOpen ? undefined : -1}
-              className={`mx-3 block rounded-xl px-4 py-3 text-base font-light text-[var(--color-ink)] no-underline hover:bg-[var(--color-surface-soft)] ${isActive(link.href) ? 'font-bold text-[var(--color-paw)]' : ''}`}
-            >
-              {link.label}
-            </a>
-          ))}
+      {siteConfig.navigation.primary.length > 0 && (
+        <div id="mobile-navigation" aria-hidden={!menuOpen} className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-lg ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="flex flex-col py-2">
+            {siteConfig.navigation.primary.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                tabIndex={menuOpen ? undefined : -1}
+                className={`mx-3 block rounded-xl px-4 py-3 text-base font-light text-[var(--color-ink)] no-underline hover:bg-[var(--color-surface-soft)] ${isActive(link.href) ? 'font-bold text-[var(--color-paw)]' : ''}`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div data-pf-theme={dark ? 'dark' : undefined}>
         <pagefind-modal ref={searchModalRef} reset-on-close></pagefind-modal>

@@ -1,2 +1,1 @@
-export const SITE_TITLE = 'Furnest'
-export const SITE_DESCRIPTION = 'Furnest | 绒毛小窝 - 个人博客'
+export { siteConfig } from './config'

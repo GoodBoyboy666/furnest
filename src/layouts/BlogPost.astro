@@ -6,13 +6,14 @@ import Footer from '../components/Footer.astro'
 import FormattedDate from '../components/FormattedDate.astro'
 import Header from '../components/Header'
 import FurryMark from '../components/FurryMark.astro'
+import { siteConfig } from '../config'
 
 type Props = CollectionEntry<'blog'>['data']
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props
 ---
 
-<html lang="zh-CN" class="scroll-smooth">
+<html lang={siteConfig.site.locale} class="scroll-smooth">
   <head>
     <BaseHead title={title} description={description} />
   </head>

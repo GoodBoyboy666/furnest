@@ -6,17 +6,20 @@ import Footer from '../components/Footer.astro'
 import Header from '../components/Header'
 import FurryMark from '../components/FurryMark.astro'
 import WaveBoundary from '../components/WaveBoundary.astro'
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+import { siteConfig } from '../config'
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 4)
+  .slice(0, siteConfig.home.recentArticleCount)
+
+const [heroTitleStart, heroTitleEnd] = siteConfig.home.heroTitle.split('|', 2)
+const heroImageSrc = typeof siteConfig.home.heroImage === 'string' ? siteConfig.home.heroImage : siteConfig.home.heroImage.src
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={siteConfig.site.locale}>
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={siteConfig.site.title} description={siteConfig.site.description} />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load isHome={true} pathname={Astro.url.pathname} />
@@ -24,7 +27,7 @@ const posts = (await getCollection('blog'))
       <section class="relative h-screen min-h-[620px] flex items-center justify-center overflow-hidden">
         <div id="hero-bg" class="absolute inset-0 opacity-0">
           <img
-            src="https://api.furry.ist/furry-img/?mode=auto"
+            src={heroImageSrc}
             alt=""
             class="w-full h-full object-cover object-[58%_center] sm:object-center"
             loading="eager"
@@ -39,18 +42,18 @@ const posts = (await getCollection('blog'))
           <FurryMark variant="ears" class="hero-ears mb-4 h-10 w-20 text-[#ffd0aa] opacity-0 drop-shadow-lg" />
           <div id="hero-creation" class="flex items-center gap-3 text-[#bfe8ff] opacity-0 sm:gap-4">
             <span class="h-px w-8 bg-current opacity-70 sm:w-14"></span>
-            <span class="text-xs font-bold tracking-[.26em] drop-shadow-lg">FURWOLF CREATION</span>
+            <span class="text-xs font-bold tracking-[.26em] drop-shadow-lg">{siteConfig.home.heroEyebrow}</span>
             <span class="h-px w-8 bg-current opacity-70 sm:w-14"></span>
           </div>
-          <h1 id="hero-title" class="mt-1 text-4xl font-semibold text-white [text-shadow:0_3px_18px_rgba(0,0,0,.75)] opacity-0 translate-y-10 sm:text-6xl">Furnest <span class="text-[#ffd0aa]">|</span> 绒毛小窝</h1>
-          <p id="hero-subtitle" class="mt-5 text-base italic text-white/95 [text-shadow:0_2px_12px_rgba(0,0,0,.85)] opacity-0 translate-y-6 sm:text-lg">&lang;看朝霞万里，石头花开&rang;</p>
+          <h1 id="hero-title" class="mt-1 text-4xl font-semibold text-white [text-shadow:0_3px_18px_rgba(0,0,0,.75)] opacity-0 translate-y-10 sm:text-6xl">{heroTitleStart}{heroTitleEnd && <><span class="text-[#ffd0aa]">|</span>{heroTitleEnd}</>}</h1>
+          <p id="hero-subtitle" class="mt-5 text-base italic text-white/95 [text-shadow:0_2px_12px_rgba(0,0,0,.85)] opacity-0 translate-y-6 sm:text-lg">&lang;{siteConfig.home.heroSubtitle}&rang;</p>
         </div>
         <WaveBoundary variant="hero" class="home-boundary" />
       </section>
 
       <section id="board-heading" class="flex flex-col items-center py-20 px-8">
-        <span class="board-animate theme-kicker text-xl sm:text-2xl">RECENT ARTICLES</span>
-        <h2 class="board-animate theme-heading mt-4 mb-8 text-4xl font-medium sm:text-5xl"><span class="text-[var(--color-paw)]">|</span> 近期文章</h2>
+        <span class="board-animate theme-kicker text-xl sm:text-2xl">{siteConfig.home.recentArticlesKicker}</span>
+        <h2 class="board-animate theme-heading mt-4 mb-8 text-4xl font-medium sm:text-5xl"><span class="text-[var(--color-paw)]">|</span> {siteConfig.home.recentArticlesTitle}</h2>
         <hr class="board-line theme-rule w-full max-w-[1380px] mb-12 origin-left" />
 
         {
@@ -66,7 +69,7 @@ const posts = (await getCollection('blog'))
               ))}
             </div>
           ) : (
-            <p class="theme-muted text-lg">暂无文章</p>
+            <p class="theme-muted text-lg">{siteConfig.home.emptyState}</p>
           )
         }
       </section>

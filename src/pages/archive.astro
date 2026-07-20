@@ -4,7 +4,7 @@ import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header'
 import FurryMark from '../components/FurryMark.astro'
-import { SITE_TITLE } from '../consts'
+import { siteConfig } from '../config'
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -19,9 +19,9 @@ for (const post of posts) {
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={siteConfig.site.locale}>
   <head>
-    <BaseHead title={`归档 - ${SITE_TITLE}`} description="文章归档" />
+    <BaseHead title={`${siteConfig.pages.archive.title} - ${siteConfig.site.title}`} description={siteConfig.pages.archive.description} />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load pathname={Astro.url.pathname} />
@@ -29,12 +29,12 @@ for (const post of posts) {
       <div class="max-w-3xl mx-auto">
         <div id="page-title" class="relative mb-10 border-l-4 border-transparent pl-6 sm:pl-9">
           <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)] opacity-0" aria-hidden="true"></span>
-          <span class="page-animate theme-kicker block text-2xl opacity-0">ARCHIVE</span>
-          <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">归档</h1>
+          <span class="page-animate theme-kicker block text-2xl opacity-0">{siteConfig.pages.archive.kicker}</span>
+          <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">{siteConfig.pages.archive.title}</h1>
         </div>
         <div id="page-list" class="flex flex-col gap-12">
           {
-            Array.from(grouped.entries())
+            Array.from(grouped.entries()).length > 0 ? Array.from(grouped.entries())
               .sort((a, b) => b[0] - a[0])
               .map(([year, posts]) => (
                 <section class="opacity-0">
@@ -46,7 +46,7 @@ for (const post of posts) {
                   <hr class="theme-rule mb-4" />
                   <div class="flex flex-col gap-3">
                     {posts.map((post) => {
-                      const dateStr = post.data.pubDate.toLocaleDateString('zh-CN', {
+                      const dateStr = post.data.pubDate.toLocaleDateString(siteConfig.site.contentDateLocale, {
                         month: 'long',
                         day: 'numeric',
                       })
@@ -59,7 +59,7 @@ for (const post of posts) {
                     })}
                   </div>
                 </section>
-              ))
+              )) : <p class="theme-muted text-lg">{siteConfig.pages.archive.emptyState}</p>
           }
         </div>
       </div>

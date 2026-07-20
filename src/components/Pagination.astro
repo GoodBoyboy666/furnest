@@ -4,6 +4,8 @@ interface Props {
   nextUrl?: string
 }
 
+import { siteConfig } from '../config'
+
 const { prevUrl, nextUrl } = Astro.props
 ---
 
@@ -12,12 +14,12 @@ const { prevUrl, nextUrl } = Astro.props
     <nav class="flex justify-center gap-8 mt-12">
       {prevUrl && (
         <a href={prevUrl} class="theme-surface theme-card rounded-full px-6 py-2 text-base font-light no-underline">
-          &larr; 上一页
+          &larr; {siteConfig.blog.previousLabel}
         </a>
       )}
       {nextUrl && (
         <a href={nextUrl} class="theme-surface theme-card rounded-full px-6 py-2 text-base font-light no-underline">
-          下一页 &rarr;
+          {siteConfig.blog.nextLabel} &rarr;
         </a>
       )}
     </nav>

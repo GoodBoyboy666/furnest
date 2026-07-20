@@ -6,7 +6,7 @@ import Footer from '../../../components/Footer.astro'
 import Header from '../../../components/Header'
 import Pagination from '../../../components/Pagination.astro'
 import FurryMark from '../../../components/FurryMark.astro'
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts'
+import { siteConfig } from '../../../config'
 
 import type { GetStaticPathsResult, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
@@ -15,7 +15,7 @@ export async function getStaticPaths({ paginate }: { paginate: (data: any[], opt
   const posts = (await getCollection('blog')).sort(
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   )
-  const result = paginate(posts, { pageSize: 5 })
+  const result = paginate(posts, { pageSize: siteConfig.blog.pageSize })
   return result.filter((p: any) => p.params.page !== '1')
 }
 
@@ -25,22 +25,22 @@ const nextUrl = page.url.next
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={siteConfig.site.locale}>
   <head>
-    <BaseHead title={`${SITE_TITLE} - 第${page.currentPage}页`} description={SITE_DESCRIPTION} />
+    <BaseHead title={`${siteConfig.site.title} - 第${page.currentPage}页`} description={siteConfig.pages.blog.description} />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1">
       <section class="flex flex-col items-center py-20 px-8">
         <FurryMark variant="paw" class="blog-paw mb-3 h-10 w-10 text-[var(--color-paw)] opacity-0" />
-        <span id="blog-label" class="theme-kicker text-2xl opacity-0 translate-y-5">BLOG ARTICLES</span>
-        <h1 id="blog-title" class="theme-heading text-5xl font-medium mt-4 mb-8 opacity-0 translate-y-5">博客文章</h1>
+        <span id="blog-label" class="theme-kicker text-2xl opacity-0 translate-y-5">{siteConfig.pages.blog.kicker}</span>
+        <h1 id="blog-title" class="theme-heading text-5xl font-medium mt-4 mb-8 opacity-0 translate-y-5">{siteConfig.pages.blog.title}</h1>
         <hr id="blog-line" class="theme-rule border-t-2 w-full max-w-5xl mb-12 origin-left opacity-0" />
 
         <div id="blog-list" class="flex flex-col gap-8 max-w-5xl w-full">
           {
-              page.data.map((post) => (
+            page.data.length > 0 ? page.data.map((post) => (
               <BlogCard
                 title={post.data.title}
                 description={post.data.description}
@@ -49,7 +49,7 @@ const nextUrl = page.url.next
                 heroImage={post.data.heroImage}
                 category={post.data.category}
               />
-            ))
+            )) : <p class="theme-muted text-center text-lg">{siteConfig.pages.blog.emptyState}</p>
           }
         </div>
         <Pagination prevUrl={prevUrl} nextUrl={nextUrl} />
