@@ -6,10 +6,11 @@ import TuftMark from '../assets/marks/tuft.svg'
 interface Props {
   variant?: 'paw' | 'ears' | 'tuft'
   class?: string
+  'data-motion'?: string
 }
 
-const { variant = 'paw', class: className = '' } = Astro.props
+const { variant = 'paw', class: className = '', 'data-motion': dataMotion } = Astro.props
 const Mark = variant === 'ears' ? EarsMark : variant === 'tuft' ? TuftMark : PawMark
 ---
 
-<Mark class={className} aria-hidden="true" focusable="false" />
+<Mark class={className} data-motion={dataMotion} aria-hidden="true" focusable="false" />

@@ -30,14 +30,14 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
       <article class="mx-auto max-w-6xl">
         {
           heroImage && (
-            <div id="post-hero" class="theme-surface mx-auto mb-8 max-w-4xl overflow-hidden p-2 opacity-0">
+            <div id="post-hero" class="theme-surface mx-auto mb-8 max-w-4xl overflow-hidden p-2" data-motion="fade">
               <Image src={heroImage} alt="" class="block w-full rounded-2xl" width={1020} height={510} />
             </div>
           )
         }
         <div id="post-title" class="text-center mb-12">
-          <FurryMark variant="paw" class="animate-title mx-auto mb-3 h-9 w-9 text-[var(--color-paw)] opacity-0" />
-          <div class="animate-title text-sm text-[var(--color-muted)] mb-2 opacity-0">
+          <FurryMark variant="paw" class="animate-title mx-auto mb-3 h-9 w-9 text-[var(--color-paw)]" data-motion="from-top" />
+          <div class="animate-title text-sm text-[var(--color-muted)] mb-2" data-motion="from-top">
             <FormattedDate date={pubDate} />
             {updatedDate && (
               <span class="text-sm text-[var(--color-muted)] italic">
@@ -45,18 +45,18 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
               </span>
             )}
           </div>
-          <h1 data-pagefind-body data-pagefind-meta="title" class="animate-title text-4xl font-bold text-[var(--color-ink)] opacity-0">{title}</h1>
-          <hr class="animate-title theme-rule mt-6 opacity-0" />
+          <h1 data-pagefind-body data-pagefind-meta="title" class="animate-title text-4xl font-bold text-[var(--color-ink)]" data-motion="from-top">{title}</h1>
+          <hr class="animate-title theme-rule mt-6" data-motion="from-top" />
         </div>
 
         <div class="flex justify-center gap-12">
           <div id="article-wrapper" class="max-w-3xl w-full">
-            <div id="article-body" data-pagefind-body class="article-prose prose prose-lg max-w-none opacity-0">
+            <div id="article-body" data-pagefind-body class="article-prose prose prose-lg max-w-none" data-motion="from-bottom">
               <slot />
             </div>
           </div>
 
-          <aside id="toc" class="hidden xl:block sticky top-24 w-56 shrink-0 self-start opacity-0">
+          <aside id="toc" class="hidden xl:block sticky top-24 w-56 shrink-0 self-start" data-motion="from-right">
             <nav>
               <h3 class="text-sm font-semibold text-[var(--color-paw)] uppercase tracking-wide mb-4">目录</h3>
               <ul id="toc-list" class="text-sm space-y-0.5 border-l border-[var(--color-border)] pl-4"></ul>
@@ -72,12 +72,15 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
 <script>
   import { stagger } from 'motion'
   import { animateElements } from '../scripts/animate-elements'
+  import { completeMotionCandidates, initMotionPage, isMotionPending, markMotionPending } from '../scripts/motion-handshake'
 
   document.addEventListener('astro:page-load', () => {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const articleBody = document.getElementById('article-body')
-    const tocList = document.getElementById('toc-list')
-    if (!articleBody || !tocList) {
+    if (!articleBody) return
+    initMotionPage(articleBody, (shouldAnimate) => {
+      const reduceMotion = !shouldAnimate
+      const tocList = document.getElementById('toc-list')
+    if (!tocList) {
       const tocEl = document.getElementById('toc')
       if (tocEl) tocEl.style.display = 'none'
     } else {
@@ -129,19 +132,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
           const tocEl = document.getElementById('toc')!
           tocEl.style.opacity = '1'
           tocEl.style.transform = 'none'
-        } else requestAnimationFrame(() => {
+        } else {
           const tocEl = document.getElementById('toc')!
           animateElements(tocEl, { opacity: [0, 1], x: [32, 0] }, { duration: 0.5, easing: 'ease-out' })
-        })
+        }
       }
     }
 
     const heroEl = document.getElementById('post-hero')
     if (heroEl) {
       if (reduceMotion) heroEl.style.opacity = '1'
-      else requestAnimationFrame(() => {
+      else {
         animateElements(heroEl, { opacity: [0, 1] }, { duration: 0.6, easing: 'ease-out' })
-      })
+      }
     }
 
     if (reduceMotion) {
@@ -149,14 +152,14 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
         el.style.opacity = '1'
         el.style.transform = 'none'
       })
-    } else requestAnimationFrame(() => {
+    } else {
       const titleItems = document.querySelectorAll('#post-title .animate-title')
       animateElements(
         Array.from(titleItems),
         { opacity: [0, 1], y: [-20, 0] },
         { duration: 0.4, delay: stagger(0.12), easing: 'ease-out' }
       )
-    })
+    }
 
     const bodyEl = document.getElementById('article-body')
     if (bodyEl) {
@@ -173,22 +176,28 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
         animateElements(bodyEl, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, easing: 'ease-out' })
       }
 
-      requestAnimationFrame(() => {
-        const rect = bodyEl.getBoundingClientRect()
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          animateBody()
-        }
-      })
+      const rect = bodyEl.getBoundingClientRect()
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        animateBody()
+      } else {
+        markMotionPending([bodyEl])
+        bodyEl.style.opacity = '0'
+        bodyEl.style.transform = 'translateY(20px)'
+      }
 
       const bodyObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            animateBody()
+            if (isMotionPending(bodyEl)) {
+              animateBody()
+              completeMotionCandidates([bodyEl])
+            }
             bodyObserver.unobserve(entry.target)
           }
         })
       }, { threshold: 0.05 })
       bodyObserver.observe(bodyEl)
     }
+    })
   })
 </script>

@@ -47,6 +47,65 @@ const imageURL = new URL(imageSource, Astro.site ?? Astro.url.origin);
     document.documentElement.classList.add('dark')
   }
 </script>
+<script is:inline>
+  (() => {
+    const className = 'motion-pending'
+    const timeoutMs = 1800
+    const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!window.__furnestMotion) {
+      let fallbackTimer
+      const clearFallback = () => {
+        if (fallbackTimer !== undefined) {
+          window.clearTimeout(fallbackTimer)
+          fallbackTimer = undefined
+        }
+      }
+      const revealPendingCandidates = (root) => {
+        root.querySelectorAll('[data-motion-pending]').forEach((candidate) => {
+          candidate.style.removeProperty('opacity')
+          candidate.style.removeProperty('transform')
+          candidate.removeAttribute('data-motion-pending')
+        })
+      }
+      const reveal = (root = document.documentElement) => {
+        root.classList.remove(className)
+        revealPendingCandidates(root)
+        clearFallback()
+      }
+      const prepare = (root = document.documentElement) => {
+        clearFallback()
+        if (reduceMotion()) {
+          root.classList.remove(className)
+          return
+        }
+
+        root.classList.add(className)
+        fallbackTimer = window.setTimeout(() => {
+          fallbackTimer = undefined
+          const currentRoot = document.documentElement
+          currentRoot.classList.remove(className)
+          revealPendingCandidates(currentRoot)
+        }, timeoutMs)
+      }
+
+      window.__furnestMotion = {
+        prepare,
+        claim: () => !reduceMotion() && document.documentElement.classList.contains(className),
+        complete: () => document.documentElement.classList.remove(className),
+        fail: () => reveal(),
+      }
+
+      window.__furnestMotionLifecycleInstalled = true
+      document.addEventListener('astro:before-swap', (event) => {
+        window.__furnestMotion.prepare(event.newDocument.documentElement)
+      })
+      document.addEventListener('astro:after-swap', () => window.__furnestMotion.prepare())
+    }
+
+    window.__furnestMotion.prepare()
+  })()
+</script>
 <script>
   document.addEventListener('astro:after-swap', () => {
     if (localStorage.theme === 'dark') {

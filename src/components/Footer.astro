@@ -11,7 +11,7 @@ const avatarSrc = typeof siteConfig.brand.avatar === 'string' ? siteConfig.brand
 
 <footer class="relative mt-20 w-full bg-[var(--color-surface-soft)] md:mt-24">
   <WaveBoundary variant="footer" class="footer-boundary" />
-  <div class="flex flex-col lg:flex-row gap-8 lg:gap-0 py-8 px-4 sm:px-8 lg:px-16 mx-auto max-w-[1920px]">
+  <div class="flex flex-col lg:flex-row gap-8 lg:gap-0 py-8 px-4 sm:px-8 lg:px-16 mx-auto max-w-[1920px]" data-motion="fade">
     {footerGroups.length > 0 && (
       <div class="flex-1 flex justify-center">
         <div class="w-full max-w-md grid grid-cols-3 gap-x-2 sm:gap-x-6">
@@ -48,9 +48,9 @@ const avatarSrc = typeof siteConfig.brand.avatar === 'string' ? siteConfig.brand
     </div>
   </div>
 
-  <hr class="footer-line border-[var(--color-border)] w-full origin-left" />
+  <hr class="footer-line border-[var(--color-border)] w-full origin-left" data-motion="scale-x" />
 
-  <div class="flex flex-col md:flex-row items-center gap-4 md:gap-0 py-6 px-4 sm:px-8 lg:px-16 mx-auto max-w-[1920px]">
+  <div class="flex flex-col md:flex-row items-center gap-4 md:gap-0 py-6 px-4 sm:px-8 lg:px-16 mx-auto max-w-[1920px]" data-motion="fade">
     <div class="flex-1 flex justify-center">
       <div class="flex flex-col gap-1 text-center md:text-left">
         <span class="text-sm font-light text-[var(--color-muted)]">{siteConfig.footer.poweredBy} {siteConfig.brand.shortMark} {siteConfig.brand.version}</span>

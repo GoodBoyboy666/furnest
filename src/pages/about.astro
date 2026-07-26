@@ -17,16 +17,16 @@ import { siteConfig } from '../config'
       <div class="max-w-4xl mx-auto">
         <div id="page-title" class="relative mb-12 overflow-hidden border-y border-[var(--color-border)] py-10 sm:py-14">
           <div class="relative border-l-4 border-transparent pl-6 sm:pl-9">
-            <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)] opacity-0" aria-hidden="true"></span>
-            <FurryMark variant="ears" class="page-animate mb-5 h-12 w-24 text-[var(--color-paw)] opacity-0" />
-            <span class="page-animate theme-kicker block text-2xl opacity-0">{siteConfig.pages.about.kicker}</span>
-            <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">{siteConfig.pages.about.title}</h1>
-            <p class="page-animate theme-muted mt-5 max-w-xl text-lg opacity-0">{siteConfig.pages.about.intro}</p>
+            <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)]" data-motion="from-left" aria-hidden="true"></span>
+            <FurryMark variant="ears" class="page-animate mb-5 h-12 w-24 text-[var(--color-paw)]" data-motion="from-bottom" />
+            <span class="page-animate theme-kicker block text-2xl" data-motion="from-bottom">{siteConfig.pages.about.kicker}</span>
+            <h1 class="page-animate theme-heading text-5xl font-medium mt-3" data-motion="from-bottom">{siteConfig.pages.about.title}</h1>
+            <p class="page-animate theme-muted mt-5 max-w-xl text-lg" data-motion="from-bottom">{siteConfig.pages.about.intro}</p>
           </div>
           <FurryMark variant="paw" class="absolute -bottom-10 right-1 h-36 w-36 rotate-12 text-[var(--color-sky)] opacity-10 sm:right-8" />
         </div>
-        <div id="page-list" class="prose prose-lg max-w-none border-l border-[var(--color-border)] pl-6 opacity-0 sm:pl-10 prose-headings:text-[var(--color-ink)] prose-p:text-[var(--color-muted)]">
-          {siteConfig.pages.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        <div id="page-list" class="prose prose-lg max-w-none border-l border-[var(--color-border)] pl-6 sm:pl-10 prose-headings:text-[var(--color-ink)] prose-p:text-[var(--color-muted)]">
+          {siteConfig.pages.about.paragraphs.map((paragraph) => <p data-motion="from-bottom">{paragraph}</p>)}
         </div>
       </div>
     </main>

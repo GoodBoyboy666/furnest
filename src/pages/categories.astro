@@ -32,14 +32,14 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
     <main class="flex-1 py-20 px-8">
       <div class="max-w-3xl mx-auto">
         <div id="page-title" class="relative mb-10 border-l-4 border-transparent pl-6 sm:pl-9">
-          <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)] opacity-0" aria-hidden="true"></span>
-          <span class="page-animate theme-kicker block text-2xl opacity-0">{siteConfig.pages.categories.kicker}</span>
-          <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">{siteConfig.pages.categories.title}</h1>
+          <span class="page-accent absolute inset-y-0 -left-1 w-1 bg-[var(--color-paw)]" data-motion="from-left" aria-hidden="true"></span>
+          <span class="page-animate theme-kicker block text-2xl" data-motion="from-bottom">{siteConfig.pages.categories.kicker}</span>
+          <h1 class="page-animate theme-heading text-5xl font-medium mt-3" data-motion="from-bottom">{siteConfig.pages.categories.title}</h1>
         </div>
         <div id="page-list" class="flex flex-col gap-12">
           {
             sortedGroups.length > 0 ? sortedGroups.map(([category, posts]) => (
-              <section class="opacity-0">
+              <section data-motion="from-bottom">
                 <h2 class="flex items-center gap-3 text-2xl font-bold text-[var(--color-ink)] mb-4">
                   <FurryMark variant="paw" class="h-6 w-6 text-[var(--color-paw)]" />
                   {category}
@@ -63,7 +63,7 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
                   })}
                 </div>
               </section>
-            )) : <p class="theme-muted text-lg">{siteConfig.pages.categories.emptyState}</p>
+            )) : <p class="theme-muted text-lg" data-motion="from-bottom">{siteConfig.pages.categories.emptyState}</p>
           }
         </div>
       </div>

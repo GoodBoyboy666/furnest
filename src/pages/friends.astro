@@ -26,8 +26,8 @@ const friends: Friend[] = friendsData
     <main class="flex-1 py-20 px-8">
       <div class="max-w-5xl mx-auto">
         <div id="page-title" class="mb-10 border-l-4 border-[var(--color-paw)] pl-6 sm:pl-9">
-          <span class="page-animate theme-kicker block text-2xl opacity-0">{siteConfig.pages.friends.kicker}</span>
-          <h1 class="page-animate theme-heading text-5xl font-medium mt-3 opacity-0">{siteConfig.pages.friends.title}</h1>
+          <span class="page-animate theme-kicker block text-2xl" data-motion="from-bottom">{siteConfig.pages.friends.kicker}</span>
+          <h1 class="page-animate theme-heading text-5xl font-medium mt-3" data-motion="from-bottom">{siteConfig.pages.friends.title}</h1>
         </div>
         <div id="page-list" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {
@@ -36,7 +36,8 @@ const friends: Friend[] = friendsData
                 href={friend.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="theme-surface theme-card group relative flex min-w-0 items-center gap-4 p-5 no-underline opacity-0"
+                class="theme-surface theme-card group relative flex min-w-0 items-center gap-4 p-5 no-underline"
+                data-motion="from-bottom"
               >
                 <span class="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[var(--color-surface-soft)] text-xl font-medium text-[var(--color-fur)]">
                   <span aria-hidden="true">{friend.name.charAt(0)}</span>
@@ -57,7 +58,7 @@ const friends: Friend[] = friendsData
                 <FurryMark variant="paw" class="theme-hover-motion h-7 w-7 shrink-0 text-[var(--color-paw)] opacity-60 transition-transform group-hover:rotate-12" />
                 <span class="sr-only">（在新标签页中打开）</span>
               </a>
-            )) : <p class="theme-muted col-span-full text-center text-lg">{siteConfig.pages.friends.emptyState}</p>
+            )) : <p class="theme-muted col-span-full text-center text-lg" data-motion="from-bottom">{siteConfig.pages.friends.emptyState}</p>
           }
         </div>
       </div>
@@ -69,10 +70,5 @@ const friends: Friend[] = friendsData
 <script>
   import { initListPageAnimations } from '../scripts/list-page-animations'
 
-  document.addEventListener('astro:page-load', () => {
-    const friendList = document.getElementById('page-list')
-    if (!friendList || friendList.dataset.animationInitialized === 'true') return
-    friendList.dataset.animationInitialized = 'true'
-    initListPageAnimations('page-title', 'page-list')
-  })
+  document.addEventListener('astro:page-load', () => initListPageAnimations('page-title', 'page-list'))
 </script>

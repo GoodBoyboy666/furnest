@@ -74,7 +74,7 @@ export const siteConfig: SiteConfig = {
     description: 'Furnest | 绒毛小窝 - 个人博客',
     url: 'https://www.furwolf.com',
     locale: 'zh-CN',
-    dateLocale: 'en-US',
+    dateLocale: 'zh-CN',
     contentDateLocale: 'zh-CN',
   },
   brand: {

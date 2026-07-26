@@ -23,7 +23,7 @@ const dateStr = pubDate.toLocaleDateString(siteConfig.site.contentDateLocale, {
 })
 ---
 
-<a href={`/blog/${slug}`} class:list={['theme-surface theme-card group block overflow-hidden no-underline opacity-0 translate-y-6']} data-animate>
+<a href={`/blog/${slug}`} class:list={['theme-surface theme-card group block overflow-hidden no-underline']} data-animate data-motion="from-bottom">
   <article class="flex flex-col sm:flex-row">
     {
       heroImage && (
