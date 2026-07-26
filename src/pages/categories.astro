@@ -1,14 +1,12 @@
 ---
-import { getCollection } from 'astro:content'
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
 import Header from '../components/Header'
 import FurryMark from '../components/FurryMark.astro'
 import { siteConfig } from '../config'
+import { getSortedBlogPosts } from '../lib/posts'
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-)
+const posts = await getSortedBlogPosts()
 
 const grouped = new Map<string, typeof posts>()
 for (const post of posts) {
@@ -54,10 +52,11 @@ const sortedGroups = Array.from(grouped.entries()).sort((a, b) => {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
+                      timeZone: 'UTC',
                     })
                     return (
                       <a href={`/blog/${post.id}`} class="theme-list-link flex items-baseline gap-4 px-3 py-2 -mx-3 no-underline">
-                        <time class="w-28 shrink-0 whitespace-nowrap text-sm font-light text-[var(--color-muted)]">{dateStr}</time>
+                        <time datetime={post.data.pubDate.toISOString()} class="w-28 shrink-0 whitespace-nowrap text-sm font-light text-[var(--color-muted)]">{dateStr}</time>
                         <span class="text-base font-medium truncate">{post.data.title}</span>
                       </a>
                     )

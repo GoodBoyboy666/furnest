@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content'
 import BaseHead from '../../components/BaseHead.astro'
 import BlogCard from '../../components/BlogCard.astro'
 import Footer from '../../components/Footer.astro'
@@ -7,10 +6,9 @@ import Header from '../../components/Header'
 import Pagination from '../../components/Pagination.astro'
 import FurryMark from '../../components/FurryMark.astro'
 import { siteConfig } from '../../config'
+import { getSortedBlogPosts } from '../../lib/posts'
 
-const allPosts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-)
+const allPosts = await getSortedBlogPosts()
 const pageSize = siteConfig.blog.pageSize
 const posts = allPosts.slice(0, pageSize)
 const nextUrl = allPosts.length > pageSize ? '/blog/page/2' : undefined

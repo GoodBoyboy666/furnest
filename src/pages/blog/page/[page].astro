@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content'
 import BaseHead from '../../../components/BaseHead.astro'
 import BlogCard from '../../../components/BlogCard.astro'
 import Footer from '../../../components/Footer.astro'
@@ -7,19 +6,22 @@ import Header from '../../../components/Header'
 import Pagination from '../../../components/Pagination.astro'
 import FurryMark from '../../../components/FurryMark.astro'
 import { siteConfig } from '../../../config'
+import { getSortedBlogPosts } from '../../../lib/posts'
 
-import type { GetStaticPathsResult, Page } from 'astro'
+import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
-export async function getStaticPaths({ paginate }: { paginate: (data: any[], opts: { pageSize: number }) => GetStaticPathsResult }): Promise<GetStaticPathsResult> {
-  const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-  )
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getSortedBlogPosts()
   const result = paginate(posts, { pageSize: siteConfig.blog.pageSize })
-  return result.filter((p: any) => p.params.page !== '1')
+  return result.filter(({ params }) => params.page !== '1')
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
 }
 
-const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> }
+const { page } = Astro.props
 const prevUrl = page.currentPage === 2 ? '/blog' : page.url.prev
 const nextUrl = page.url.next
 ---

@@ -15,7 +15,14 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props
 
 <html lang={siteConfig.site.locale} class="scroll-smooth">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={heroImage}
+      type="article"
+      publishedTime={pubDate}
+      modifiedTime={updatedDate}
+    />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header client:load pathname={Astro.url.pathname} />

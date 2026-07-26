@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content'
 import ArticleCard from '../components/ArticleCard.astro'
 import BaseHead from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro'
@@ -7,10 +6,9 @@ import Header from '../components/Header'
 import FurryMark from '../components/FurryMark.astro'
 import WaveBoundary from '../components/WaveBoundary.astro'
 import { siteConfig } from '../config'
+import { getSortedBlogPosts } from '../lib/posts'
 
-const posts = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, siteConfig.home.recentArticleCount)
+const posts = (await getSortedBlogPosts()).slice(0, siteConfig.home.recentArticleCount)
 
 const [heroTitleStart, heroTitleEnd] = siteConfig.home.heroTitle.split('|', 2)
 const heroImageSrc = typeof siteConfig.home.heroImage === 'string' ? siteConfig.home.heroImage : siteConfig.home.heroImage.src

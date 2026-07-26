@@ -8,6 +8,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
+    "typecheck": "tsc --noEmit",
+    "check:astro": "astro check",
+    "check": "pnpm typecheck && pnpm check:astro && pnpm build",
     "preview": "astro preview",
     "astro": "astro"
   },
