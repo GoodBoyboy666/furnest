@@ -252,7 +252,7 @@ export default function Header({ isHome: initialIsHome = false, pathname: initia
           <div className="theme-surface w-full max-w-sm p-6">
             <h2 id="search-unavailable-title" className="text-lg font-semibold">搜索暂不可用</h2>
             <p className="theme-muted mt-2 text-sm">请先运行 pnpm build 后重试；若仍不可用，请重启开发服务器。</p>
-            <button type="button" onClick={closeUnavailableSearch} autoFocus className="mt-5 rounded-full bg-[var(--color-paw)] px-4 py-2 text-sm font-semibold text-white">
+            <button type="button" onClick={closeUnavailableSearch} autoFocus className="mt-5 rounded-full bg-[var(--color-paw)] px-4 py-2 text-sm font-semibold text-[var(--color-on-paw)]">
               关闭
             </button>
           </div>

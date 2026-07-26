@@ -10,6 +10,7 @@
   --color-muted: #79695e;
   --color-sky: #286f98;
   --color-paw: #ad4f20;
+  --color-on-paw: #fffaf0;
   --color-fur: #8a5d42;
   --color-border: #dcc8ad;
   --shadow-soft: 0 12px 34px rgb(94 61 38 / 10%);
@@ -26,6 +27,7 @@
   --color-muted: #c8b9aa;
   --color-sky: #71b8df;
   --color-paw: #ef9a5d;
+  --color-on-paw: #352820;
   --color-fur: #d1a27f;
   --color-border: #54453d;
   --shadow-soft: 0 12px 34px rgb(0 0 0 / 22%);
