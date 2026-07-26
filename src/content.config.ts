@@ -25,6 +25,7 @@ const blog = defineCollection({
 			updatedDate: isoDate.optional(),
 			heroImage: z.optional(image()),
 			category: z.string().optional(),
+			draft: z.boolean().default(false),
 		}).superRefine(({ pubDate, updatedDate }, context) => {
 			if (updatedDate && updatedDate < pubDate) {
 				context.addIssue({
